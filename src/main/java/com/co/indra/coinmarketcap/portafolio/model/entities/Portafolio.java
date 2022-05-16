@@ -1,7 +1,5 @@
 package com.co.indra.coinmarketcap.portafolio.model.entities;
 
-import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 
@@ -9,7 +7,7 @@ public class Portafolio implements Serializable {
 
     private Long id;
 
-    private String mailUser;
+    private String username;
 
     private String namePortafolio;
 
@@ -18,15 +16,15 @@ public class Portafolio implements Serializable {
     public Portafolio() {
     }
 
-    public Portafolio(Long id, String mailUser, String namePortafolio, Double balancePortafolio) {
+    public Portafolio(Long id, String username, String namePortafolio, Double balancePortafolio) {
         this.id = id;
-        this.mailUser = mailUser;
+        this.username = username;
         this.namePortafolio = namePortafolio;
         this.balancePortafolio = balancePortafolio;
     }
 
-    public Portafolio(String mailUser, String namePortafolio, Double balancePortafolio) {
-        this.mailUser = mailUser;
+    public Portafolio(String username, String namePortafolio, Double balancePortafolio) {
+        this.username = username;
         this.namePortafolio = namePortafolio;
         this.balancePortafolio = balancePortafolio;
     }
@@ -39,12 +37,12 @@ public class Portafolio implements Serializable {
         this.id = id;
     }
 
-    public String getMailUser() {
-        return mailUser;
+    public String getUsername() {
+        return username;
     }
 
-    public void setMailUser(String mailUser) {
-        this.mailUser = mailUser;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getNamePortafolio() {

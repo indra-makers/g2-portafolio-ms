@@ -17,20 +17,20 @@ public class PortafolioService {
     private PortafolioRepository portafolioRepository;
 
     public void registerPortafolio(Portafolio portafolio) {
-        List<Portafolio> portafolioByNamePortafolioAndMailUser = portafolioRepository.findByNamePortafolioAndMailUser(portafolio.getNamePortafolio(), portafolio.getMailUser());
+        List<Portafolio> portafolioByNamePortafolioAndUsername = portafolioRepository.findByNamePortafolioAndUsername(portafolio.getNamePortafolio(), portafolio.getUsername());
 
-        if(!portafolioByNamePortafolioAndMailUser.isEmpty()) {
+        if(!portafolioByNamePortafolioAndUsername.isEmpty()) {
             throw new BusinessException(ErrorCodes.PORTAFOLIO_WITH_NAME_EXISTS);
         }else{
             portafolioRepository.create(portafolio);
         }
     }
 
-    public List<Portafolio> getPortafolioByMailUser(String mailUser) {
-        if(portafolioRepository.findByMailUser(mailUser).isEmpty()){
-            throw new NotFoundException(ErrorCodes.PORTAFOLIO_WITH_MAIL_USER_NOT_EXISTS.getMessage());
+    public List<Portafolio> getPortafolioByUsername(String username) {
+        if(portafolioRepository.findByUsername(username).isEmpty()){
+            throw new NotFoundException(ErrorCodes.PORTAFOLIO_WITH_USERNAME_NOT_EXISTS.getMessage());
         }else{
-            return portafolioRepository.findByMailUser(mailUser);
+            return portafolioRepository.findByUsername(username);
         }
 
     }

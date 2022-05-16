@@ -22,10 +22,8 @@ public class Transaction implements Serializable {
 
     private String notes;
 
-    @Column(name = "totalRecived")
     private Double totalRecived;
 
-    @Column(name = "amount")
     private int amount;
 
     public Transaction() {

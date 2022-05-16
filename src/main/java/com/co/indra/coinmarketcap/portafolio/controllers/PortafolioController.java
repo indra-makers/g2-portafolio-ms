@@ -17,6 +17,7 @@ public class PortafolioController {
     private PortafolioService portafolioService;
 
     /**
+     * http://localhost:8081/api/portafolio/portafolios
      * PATH /portafolios
      * POST
      */
@@ -26,13 +27,14 @@ public class PortafolioController {
     }
 
     /**
-     * GET portafolios/users/{mailUser}/portafolios
+     * http://localhost:8081/api/portafolio/portafolios/users/{{username}}/portafolios
+     * GET portafolios/users/{username}/portafolios
      */
     @GetMapping(Routes.PORTAFOLIO_BY_USER_PATH)
-    public List<Portafolio> getPortafoliosUser(
-            @PathVariable("mailUser") String mailUser) {
+    public List<Portafolio> getPortafoliosUserName(
+            @PathVariable("username") String username) {
 
-        return portafolioService.getPortafolioByMailUser(mailUser);
+        return portafolioService.getPortafolioByUsername(username);
     }
 
 }
