@@ -17,7 +17,7 @@ public class PortafolioController {
     private PortafolioService portafolioService;
 
     /**
-     * http://localhost:8081/api/portafolio/portafolios
+     * http://localhost:8081/api/portafolios
      * PATH /portafolios
      * POST
      */
@@ -27,7 +27,7 @@ public class PortafolioController {
     }
 
     /**
-     * http://localhost:8081/api/portafolio/portafolios/users/{{username}}/portafolios
+     * http://localhost:8081/api/portafolios/users/{{username}}/portafolios
      * GET portafolios/users/{username}/portafolios
      */
     @GetMapping(Routes.PORTAFOLIO_BY_USER_PATH)

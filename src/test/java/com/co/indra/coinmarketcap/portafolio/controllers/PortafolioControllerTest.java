@@ -1,4 +1,4 @@
-package com.co.indra.coinmarketcap.portafolio;
+package com.co.indra.coinmarketcap.portafolio.controllers;
 
 import com.co.indra.coinmarketcap.portafolio.config.Routes;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
@@ -82,7 +82,7 @@ public class PortafolioControllerTest {
         String textREsponse = response.getContentAsString();
         ErrorResponse error = objectMapper.readValue(textREsponse, ErrorResponse.class);
 
-        Assertions.assertEquals("001", error.getCode());
+        Assertions.assertEquals("002", error.getCode());
         Assertions.assertEquals("Portafolio with that name already exists", error.getMessage());
 
     }

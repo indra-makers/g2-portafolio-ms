@@ -46,5 +46,11 @@ public class PortafolioRepository {
                 username);
     }
 
+    public List<Portafolio> findPortafolioByIdPortafolio(Integer idPortafolio) {
+        return template.query(
+                "SELECT id_portafolio, username, name_portafolio, balance_portafolio FROM tbl_portafolios WHERE id_portafolio=?",
+                new PortafolioRowMapper(), idPortafolio);
+    }
+
 
 }
