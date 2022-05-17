@@ -9,14 +9,14 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 class AssetRowMapper implements RowMapper<Asset> {
     @Override
     public Asset mapRow(ResultSet rs, int rowNum) throws SQLException {
         Asset asset = new Asset();
-        asset.setId(rs.getLong("id_assets"));
         asset.setIdPortafolio(rs.getInt("id_portafolio"));
-        asset.setIdSymbolCoin(rs.getInt("id_symbolCoin"));
+        asset.setIdSymbolCoin(rs.getString("id_symbolCoin"));
         asset.setQuantity(rs.getInt("quantity"));
         asset.setBalanceAsset(rs.getDouble("balance"));
         asset.setDollarBalance(rs.getDouble("dollar_balance"));
@@ -29,4 +29,18 @@ public class AssetRepository {
 
     @Autowired
     private JdbcTemplate template;
+
+    public void createAsset(Asset asset) {
+        template.update("INSERT INTO tbl_assets(id_portafolio, id_symbolCoin, quantity, balance, dollar_balance) values(?,?,?,?,?)",
+                asset.getIdPortafolio(), asset.getIdSymbolCoin(), asset.getQuantity(), asset.getBalanceAsset(), asset.getDollarBalance());
+    }
+
+    public List<Asset> findAssetByPortafolioAndAsset(String idSymbolCoin, Integer idPortafolio) {
+        return template.query(
+                "SELECT id_portafolio, id_symbolCoin, quantity, balance, dollar_balance FROM tbl_assets WHERE id_symbolCoin=? AND id_portafolio=?",
+                new AssetRowMapper(),
+                idSymbolCoin, idPortafolio);
+    }
+
+
 }
