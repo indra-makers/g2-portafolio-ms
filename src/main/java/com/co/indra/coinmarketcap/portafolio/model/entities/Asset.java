@@ -10,7 +10,7 @@ public class Asset implements Serializable {
 
     private Integer idPortafolio;
 
-    private Integer idSymbolCoin;
+    private String idSymbolCoin;
 
     private Integer quantity;
 
@@ -21,7 +21,7 @@ public class Asset implements Serializable {
     public Asset() {
     }
 
-    public Asset(Long id, Integer idPortafolio, Integer idSymbolCoin, Double balanceAsset, Double dollarBalance) {
+    public Asset(Long id, Integer idPortafolio, String idSymbolCoin, Double balanceAsset, Double dollarBalance) {
         this.id = id;
         this.idPortafolio = idPortafolio;
         this.idSymbolCoin = idSymbolCoin;
@@ -29,7 +29,7 @@ public class Asset implements Serializable {
         this.dollarBalance = dollarBalance;
     }
 
-    public Asset(Integer idPortafolio, Integer idSymbolCoin, Double balanceAsset, Double dollarBalance) {
+    public Asset(Integer idPortafolio, String idSymbolCoin, Double balanceAsset, Double dollarBalance) {
         this.idPortafolio = idPortafolio;
         this.idSymbolCoin = idSymbolCoin;
         this.balanceAsset = balanceAsset;
@@ -52,11 +52,11 @@ public class Asset implements Serializable {
         this.idPortafolio = idPortafolio;
     }
 
-    public Integer getIdSymbolCoin() {
+    public String getIdSymbolCoin() {
         return idSymbolCoin;
     }
 
-    public void setIdSymbolCoin(Integer idSymbolCoin) {
+    public void setIdSymbolCoin(String idSymbolCoin) {
         this.idSymbolCoin = idSymbolCoin;
     }
 
