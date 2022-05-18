@@ -2,6 +2,7 @@ package com.co.indra.coinmarketcap.portafolio.repositories;
 
 import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
+import org.apache.logging.log4j.spi.ObjectThreadContextMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -40,6 +41,11 @@ public class AssetRepository {
                 "SELECT id_portafolio, id_symbolCoin, quantity, balance, dollar_balance FROM tbl_assets WHERE id_symbolCoin=? AND id_portafolio=?",
                 new AssetRowMapper(),
                 idSymbolCoin, idPortafolio);
+    }
+
+    public List<Asset> findAssetById(Long id){
+        return template.query("SELECT id_portafolio, id_symbolCoin, quantity, balance, dollar_balance FROM public.tbl_assets WHERE id_assets=?",
+               new AssetRowMapper(), id );
     }
 
 

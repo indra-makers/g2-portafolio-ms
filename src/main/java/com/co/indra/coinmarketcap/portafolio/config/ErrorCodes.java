@@ -9,7 +9,12 @@ public enum ErrorCodes {
 
     PORTAFOLIO_NOT_FOUND("Portafolio not found", "004"),
 
-    ASSET_ALREADY_EXISTS_IN_A_PORTAFOLIO("Asset already exists in a Portafolio", "005");
+    ASSET_ALREADY_EXISTS_IN_A_PORTAFOLIO("Asset already exists in a Portafolio", "005"),
+
+    ASSET_DOES_NOT_EXISTS("That asset doesnt exist", "006"),
+
+
+    ASSET_INVALID_DATE("Date must not be greater than the current one", "007");
 
     String message;
     String code;

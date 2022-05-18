@@ -1,5 +1,6 @@
 package com.co.indra.coinmarketcap.portafolio.repositories;
 
+import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -52,5 +53,14 @@ public class PortafolioRepository {
                 new PortafolioRowMapper(), idPortafolio);
     }
 
+    public int sumBalanceAsset(Integer idPortafolio){
+        return template.queryForObject("SELECT sum(balance) FROM public.tbl_assets WHERE id_portafolio=?"
+                , Integer.class, idPortafolio);
+    }
+
+    public void recalculateBalanceToPortfolio(Integer idPortafolio){
+        template.update("UPDATE public.tbl_portafolios SET balance_portafolio=? WHERE id_portafolio=?",
+               sumBalanceAsset(idPortafolio), idPortafolio);
+    }
 
 }

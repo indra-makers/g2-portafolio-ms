@@ -25,6 +25,7 @@ public class AssetService {
             throw new BusinessException(ErrorCodes.ASSET_ALREADY_EXISTS_IN_A_PORTAFOLIO);
         }
         assetRepository.createAsset(new Asset(idPortafolio, idSymbolCoin, quantity, balanceAsset, dollarBalance));
+        portafolioRepository.recalculateBalanceToPortfolio(idPortafolio);
     }
 }
 

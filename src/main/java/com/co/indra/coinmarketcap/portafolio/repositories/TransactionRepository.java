@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 class TransactionRowMapper implements RowMapper<Transaction> {
     @Override
@@ -32,5 +33,10 @@ public class TransactionRepository {
 
     @Autowired
     private JdbcTemplate template;
+
+    public void createTransaction (Transaction transaction, Long id){
+        template.update("INSERT INTO public.tbl_transactions (id_assets, type_transaction, date, actual_price, fee, notes, total_recived, amount) VALUES (?,?,?,?,?,?,?,?)",
+                id, transaction.getTypeTransaction(), transaction.getDate(), transaction.getActualPrice(), transaction.getFee(), transaction.getNotes(), transaction.getTotalRecived(), transaction.getAmount());
+    }
 
 }

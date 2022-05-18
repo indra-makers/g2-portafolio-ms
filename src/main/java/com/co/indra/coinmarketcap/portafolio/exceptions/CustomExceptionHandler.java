@@ -1,5 +1,6 @@
 package com.co.indra.coinmarketcap.portafolio.exceptions;
 
+import com.co.indra.coinmarketcap.portafolio.config.ErrorCodes;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -25,6 +26,7 @@ public class CustomExceptionHandler {
         return new ErrorResponse("NOT_FOUND", exception.getMessage());
     }
 
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -38,4 +40,5 @@ public class CustomExceptionHandler {
     public ErrorResponse handleException(Exception exception) {
         return new ErrorResponse("500", exception.getMessage());
     }
+
 }
