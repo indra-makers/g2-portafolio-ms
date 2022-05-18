@@ -15,14 +15,5 @@ public class AssetController {
     @Autowired
     private AssetService assetService;
 
-    /**
-     * http://localhost:8080/api/assets/portafolios
-     *   POST /api/assets/portafolios
-     * @param
-     * @return 200 OK
-     */
-    @PostMapping("/portafolios")
-    public void createAsset(@RequestBody Asset asset) {
-        assetService.registerAsset(asset.getIdPortafolio(), asset.getIdSymbolCoin(), asset.getQuantity(), asset.getBalanceAsset(), asset.getDollarBalance());
-    }
+
 }

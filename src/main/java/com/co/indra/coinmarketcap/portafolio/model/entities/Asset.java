@@ -30,6 +30,12 @@ public class Asset implements Serializable {
         this.dollarBalance = dollarBalance;
     }
 
+    public Asset(Integer idPortafolio, String idSymbolCoin, Integer quantity) {
+        this.idPortafolio = idPortafolio;
+        this.idSymbolCoin = idSymbolCoin;
+        this.quantity = quantity;
+    }
+
     public Asset(Integer idPortafolio, String idSymbolCoin, Integer quantity, Double balanceAsset, Double dollarBalance) {
         this.idPortafolio = idPortafolio;
         this.idSymbolCoin = idSymbolCoin;

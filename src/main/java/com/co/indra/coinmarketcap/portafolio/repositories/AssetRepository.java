@@ -24,6 +24,20 @@ class AssetRowMapper implements RowMapper<Asset> {
     }
 }
 
+class FirstAssetRowMapper implements RowMapper<Asset> {
+    @Override
+    public Asset mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Asset asset = new Asset();
+        asset.setId(rs.getLong("id_assets"));
+        asset.setIdPortafolio(rs.getInt("id_portafolio"));
+        asset.setIdSymbolCoin(rs.getString("id_symbolCoin"));
+        asset.setQuantity(rs.getInt("quantity"));
+        asset.setBalanceAsset(rs.getDouble("balance"));
+        asset.setDollarBalance(rs.getDouble("dollar_balance"));
+        return asset;
+    }
+}
+
 @Repository
 public class AssetRepository {
 
@@ -39,6 +53,13 @@ public class AssetRepository {
         return template.query(
                 "SELECT id_portafolio, id_symbolCoin, quantity, balance, dollar_balance FROM tbl_assets WHERE id_symbolCoin=? AND id_portafolio=?",
                 new AssetRowMapper(),
+                idSymbolCoin, idPortafolio);
+    }
+
+    public List<Asset> getIdAssetByPortafolioAndIdSymbolCoin(String idSymbolCoin, Integer idPortafolio) {
+        return template.query(
+                "SELECT id_assets, id_portafolio, id_symbolCoin, quantity, balance, dollar_balance FROM tbl_assets WHERE id_symbolCoin=? AND id_portafolio=?",
+                new FirstAssetRowMapper(),
                 idSymbolCoin, idPortafolio);
     }
 
