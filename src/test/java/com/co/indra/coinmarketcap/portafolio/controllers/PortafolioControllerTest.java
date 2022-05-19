@@ -250,7 +250,7 @@ public class PortafolioControllerTest {
 
         String textResponse = response.getContentAsString();
         ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
-        Assertions.assertEquals("NOT_FOUND", error.getCode());
+        Assertions.assertEquals("404", error.getCode());
     }
 
     @Test
@@ -274,7 +274,7 @@ public class PortafolioControllerTest {
 
         String textResponse = response.getContentAsString();
         ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
-        Assertions.assertEquals("NOT_FOUND", error.getCode());
+        Assertions.assertEquals("404", error.getCode());
     }
 
     @Test

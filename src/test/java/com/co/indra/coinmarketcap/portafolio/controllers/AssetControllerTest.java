@@ -20,6 +20,8 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.transaction.Transactional;
+import java.util.List;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
@@ -33,73 +35,7 @@ public class AssetControllerTest {
     private ObjectMapper objectMapper;
 
 
-    @Test
-    @Sql("/testdata/get_portafolio.sql")
-    public void createAssetHappyPath() throws Exception {
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .post("/assets/portafolios")
-                .content("{\n" +
-                        "    \"idPortafolio\": \"100\",\n" +
-                        "    \"idSymbolCoin\": \"ASD\",\n" +
-                        "    \"quantity\": \"40\",\n" +
-                        "    \"balanceAsset\": \"45\",\n" +
-                        "    \"dollarBalance\": \"50\"\n" +
-                        "}").contentType(MediaType.APPLICATION_JSON);
 
-        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
-        Assertions.assertEquals(200, response.getStatus());
-    }
-
-    @Test
-    @Sql("/testdata/get_portafolio.sql")
-    public void createAssetBadPath() throws Exception {
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .post("/assets/portafolios")
-                .content("{\n" +
-                        "    \"idPortafolio\": \"gtr\",\n" +
-                        "    \"idSymbolCoin\": \"ASD\",\n" +
-                        "    \"quantity\": \"40\",\n" +
-                        "    \"balanceAsset\": \"45\",\n" +
-                        "    \"dollarBalance\": \"50\"\n" +
-                        "}").contentType(MediaType.APPLICATION_JSON);
-
-        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
-        Assertions.assertEquals(500, response.getStatus());
-    }
-
-    @Test
-    @Sql("/testdata/get_portafolio.sql")
-    public void createAssetWithDoesNotExistPortafolioPath() throws Exception {
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .post("/assets/portafolios")
-                .content("{\n" +
-                        "    \"idPortafolio\": \"99\",\n" +
-                        "    \"idSymbolCoin\": \"ASD\",\n" +
-                        "    \"quantity\": \"40\",\n" +
-                        "    \"balanceAsset\": \"45\",\n" +
-                        "    \"dollarBalance\": \"50\"\n" +
-                        "}").contentType(MediaType.APPLICATION_JSON);
-
-        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
-        Assertions.assertEquals(404, response.getStatus());
-    }
-
-    @Test
-    @Sql("/testdata/get_assets.sql")
-    public void createAssetWithPortafolioExitsPath() throws Exception {
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .post("/assets/portafolios")
-                .content("{\n" +
-                        "    \"idPortafolio\": \"100\",\n" +
-                        "    \"idSymbolCoin\": \"XSA\",\n" +
-                        "    \"quantity\": \"40\",\n" +
-                        "    \"balanceAsset\": \"45\",\n" +
-                        "    \"dollarBalance\": \"50\"\n" +
-                        "}").contentType(MediaType.APPLICATION_JSON);
-
-        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
-        Assertions.assertEquals(412, response.getStatus());
-    }
 
     @Test
     @Sql("/testdata/get_assets.sql")
