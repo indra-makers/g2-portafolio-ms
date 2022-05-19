@@ -128,11 +128,29 @@ public class PortafolioControllerTest {
 
     @Test
     @Sql("/testdata/insert_portafolio_y_asset.sql")
-    public void deleteCoinWatchlistHappyPath() throws Exception {
+    public void deleteAssetOfPortafoliolistHappyPath() throws Exception {
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(Routes.PORTAFOLIO_PATH +Routes.ID_PORTAFOLIO_PATH + Routes.PORTAFOLIO_BY_SYMBOLCOIN_PATH, 111, "CRT");
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
         // ------------ las verificaciones--------------------
         Assertions.assertEquals(200, response.getStatus());
+
+    }
+
+    @Test
+    public void deleteAssetBySymbolicoinAndIdportafolioNotFound() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(Routes.PORTAFOLIO_PATH +Routes.ID_PORTAFOLIO_PATH + Routes.PORTAFOLIO_BY_SYMBOLCOIN_PATH, 1111, "CRT");
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        // ------------ las verificaciones--------------------
+        Assertions.assertEquals(404, response.getStatus());
+
+    }
+
+    @Test
+    public void deleteCoinWatchlistIdSymbolicoinlioNotFound() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(Routes.PORTAFOLIO_PATH +Routes.ID_PORTAFOLIO_PATH + Routes.PORTAFOLIO_BY_SYMBOLCOIN_PATH, 1111, "CRT");
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        // ------------ las verificaciones--------------------
+        Assertions.assertEquals(404, response.getStatus());
 
     }
 
