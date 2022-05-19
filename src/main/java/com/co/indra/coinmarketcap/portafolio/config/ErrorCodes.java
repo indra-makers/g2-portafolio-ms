@@ -16,7 +16,9 @@ public enum ErrorCodes {
 
     TRANSACTION_INVALID_QUANTITY("Quantity must  be greater than 0", "007"),
 
-    ASSET_QUANTITY_DONT_SUPPORT_SELL("Cannot sell more than the current quantity", "008");
+    ASSET_QUANTITY_DONT_SUPPORT_SELL("Cannot sell more than the current quantity", "008"),
+
+    SYMBOL_COIN_NOT_FOUND("Symbol-coin not found", "009");
 
     String message;
     String code;

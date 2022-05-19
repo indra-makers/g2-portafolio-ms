@@ -41,6 +41,18 @@ public class AssetService {
         portafolioService.createTransaction(transaction, idPortafolio, idAsset);
     }
 
+    public void deleteAsset(String symboliCoin, int idPortafolio) {
+
+        if(assetRepository.assetFindByIdPortafolio(idPortafolio).isEmpty()){
+            throw new NotFoundException(ErrorCodes.PORTAFOLIO_NOT_FOUND.getMessage());
+        }
+        else if(assetRepository.assetFindByPortafolioAndSimbolicoin(idPortafolio,symboliCoin).isEmpty()) {
+            throw new NotFoundException(ErrorCodes.SYMBOL_COIN_NOT_FOUND.getMessage());
+        }else{
+            assetRepository.deleteAsset(symboliCoin, idPortafolio);
+        }
+    }
+
 
 }
 
