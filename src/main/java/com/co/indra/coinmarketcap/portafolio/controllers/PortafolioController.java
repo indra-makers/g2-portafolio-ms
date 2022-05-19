@@ -68,5 +68,13 @@ public class PortafolioController {
         assetService.registerAsset(idPortafolio, firstTrasaction);
     }
 
+    /**
+     * http://localhost:8081/api/portafolio/portafolios/{id_portafolio}/assets/{id_symbolCoin}
+     * GET portafolios/users/{username}/portafolios
+     */
+    @DeleteMapping("/{id_portafolio}/assets/{id_symbolcoin}")
+    public void delete( @PathVariable("id_symbolcoin") String idSymbolCoin, @PathVariable("id_portafolio") int idPortafolio) {
+        assetService.deleteAsset(idSymbolCoin,idPortafolio);
+    }
 
 }
