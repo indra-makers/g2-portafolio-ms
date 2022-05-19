@@ -23,6 +23,7 @@ class TransactionRowMapper implements RowMapper<Transaction> {
         transaction.setActualPrice(rs.getDouble("actual_price"));
         transaction.setFee(rs.getDouble("fee"));
         transaction.setNotes(rs.getString("notes"));
+        transaction.setQuantity(rs.getInt("quantity"));
         transaction.setTotalRecived(rs.getDouble("total_recived"));
         transaction.setAmount(rs.getInt("amount"));
         return transaction;
@@ -36,17 +37,17 @@ public class TransactionRepository {
     private JdbcTemplate template;
 
 
-    public void createTransaction (Transaction transaction, Long id){
+    public void createTransaction (Transaction transaction, Long id) {
         template.update("INSERT INTO public.tbl_transactions (id_assets, type_transaction, date, actual_price, fee, notes, quantity, total_recived, amount) VALUES (?,?,?,?,?,?,?,?,?)",
                 id, transaction.getTypeTransaction(), transaction.getDate(), transaction.getActualPrice(), transaction.getFee(), transaction.getNotes(), transaction.getQuantity(), transaction.getTotalRecived(), transaction.getAmount());
 
-    public void createFirstTransaction(Long idAsset, FirstTrasaction firstTrasaction){
+    /*public void createFirstTransaction(Long idAsset, FirstTrasaction firstTrasaction){
         template.update("INSERT INTO tbl_transactions(id_assets, type_transaction, actual_price, fee, notes, total_recived, amount) values(?,?,?,?,?,?,?)",
                 idAsset, firstTrasaction.getTypeTransaction(),
                 firstTrasaction.getActualPrice(), firstTrasaction.getFee(),
                 firstTrasaction.getNotes(), firstTrasaction.getTotalRecived(),
                 firstTrasaction.getAmount());
 
+    }*/
     }
-
 }

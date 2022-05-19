@@ -1,1 +1,0 @@
-ALTER TABLE tbl_transactions ALTER COLUMN date SET DEFAULT now();
