@@ -1,5 +1,10 @@
 package com.co.indra.coinmarketcap.portafolio.controllers;
 
+
+import com.co.indra.coinmarketcap.portafolio.config.Routes;
+import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
+import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
+import com.co.indra.coinmarketcap.portafolio.model.responses.ErrorResponse;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
@@ -15,6 +20,8 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.transaction.Transactional;
+import java.util.List;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
@@ -26,4 +33,76 @@ public class AssetControllerTest {
     private AssetRepository assetRepository;
     @Autowired
     private ObjectMapper objectMapper;
+
+
+
+
+    @Test
+    @Sql("/testdata/get_assets.sql")
+    public void updateQuantityAssetToBuy() throws Exception{
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(Routes.PORTAFOLIO_PATH+Routes.ADD_TRANSACTION_TO_ASSET, 100, 100)
+                .content("{\n" +
+                        "    \"typeTransaction\": \"buy\",\n" +
+                        "    \"date\": \"2022-05-19\", \n" +
+                        "    \"actualPrice\": 5000,\n" +
+                        "    \"fee\": 3200,\n" +
+                        "    \"notes\": \"cualquier cosa\",\n" +
+                        "    \"quantity\": 2,\n" +
+                        "    \"totalRecived\": 2,\n" +
+                        "    \"amount\": 1\n" +
+                        "}").contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        Assertions.assertEquals(200, response.getStatus());
+        List<Asset> assets = assetRepository.findAssetById(100l);
+        Assertions.assertEquals(32, assets.get(0).getQuantity());
+    }
+
+    @Test
+    @Sql("/testdata/get_assets.sql")
+    public void updateQuantityAssetToSellSupport() throws Exception{
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(Routes.PORTAFOLIO_PATH+Routes.ADD_TRANSACTION_TO_ASSET, 100, 100)
+                .content("{\n" +
+                        "    \"typeTransaction\": \"sell\",\n" +
+                        "    \"date\": \"2022-05-19\", \n" +
+                        "    \"actualPrice\": 5000,\n" +
+                        "    \"fee\": 3200,\n" +
+                        "    \"notes\": \"cualquier cosa\",\n" +
+                        "    \"quantity\": 2,\n" +
+                        "    \"totalRecived\": 2,\n" +
+                        "    \"amount\": 1\n" +
+                        "}").contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        Assertions.assertEquals(200, response.getStatus());
+        List<Asset> assets = assetRepository.findAssetById(100l);
+        Assertions.assertEquals(28, assets.get(0).getQuantity());
+    }
+
+    @Test
+    @Sql("/testdata/get_assets.sql")
+    public void updateQuantityAssetToSellNotSupport() throws Exception{
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(Routes.PORTAFOLIO_PATH+Routes.ADD_TRANSACTION_TO_ASSET, 100, 100)
+                .content("{\n" +
+                        "    \"typeTransaction\": \"sell\",\n" +
+                        "    \"date\": \"2022-05-19\", \n" +
+                        "    \"actualPrice\": 5000,\n" +
+                        "    \"fee\": 3200,\n" +
+                        "    \"notes\": \"cualquier cosa\",\n" +
+                        "    \"quantity\": 31,\n" +
+                        "    \"totalRecived\": 2,\n" +
+                        "    \"amount\": 1\n" +
+                        "}").contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        Assertions.assertEquals(412, response.getStatus());
+        String textResponse = response.getContentAsString();
+        ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
+        Assertions.assertEquals("008", error.getCode());
+
+    }
+
 }

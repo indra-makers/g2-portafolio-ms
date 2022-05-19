@@ -1,0 +1,1 @@
+ALTER TABLE public.tbl_transactions ADD COLUMN quantity int NOT NULL

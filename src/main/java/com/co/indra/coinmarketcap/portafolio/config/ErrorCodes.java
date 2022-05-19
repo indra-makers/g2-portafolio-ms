@@ -9,7 +9,14 @@ public enum ErrorCodes {
 
     PORTAFOLIO_NOT_FOUND("Portafolio not found", "404"),
 
-    ASSET_ALREADY_EXISTS_IN_A_PORTAFOLIO("Asset already exists in a Portafolio", "005");
+    ASSET_ALREADY_EXISTS_IN_A_PORTAFOLIO("Asset already exists in a Portafolio", "005"),
+
+    ASSET_DOES_NOT_EXISTS("That asset doesnt exist", "006"),
+
+
+    TRANSACTION_INVALID_QUANTITY("Quantity must  be greater than 0", "007"),
+
+    ASSET_QUANTITY_DONT_SUPPORT_SELL("Cannot sell more than the current quantity", "008");
 
     String message;
     String code;

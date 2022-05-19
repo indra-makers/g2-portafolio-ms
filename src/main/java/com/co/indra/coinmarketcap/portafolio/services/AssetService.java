@@ -31,11 +31,16 @@ public class AssetService {
         if(!assetRepository.findAssetByPortafolioAndAsset(idSymbolCoin, idPortafolio).isEmpty()) {
             throw new BusinessException(ErrorCodes.ASSET_ALREADY_EXISTS_IN_A_PORTAFOLIO);
         }
-        assetRepository.createAsset(new Asset(idPortafolio, idSymbolCoin, amount, (double) amount, (amount*actualPrice)));
+
+        //assetRepository.createAsset(new Asset(idPortafolio, idSymbolCoin, quantity, balanceAsset, dollarBalance));
+        //portafolioRepository.recalculateBalanceToPortfolio(idPortafolio);
+
+        /*assetRepository.createAsset(new Asset(idPortafolio, idSymbolCoin, amount, (double) amount, (amount*actualPrice)));
         List<Asset> lst = assetRepository.getIdAssetByPortafolioAndIdSymbolCoin(idSymbolCoin, idPortafolio);
         Long idAsset;
         idAsset = lst.get(0).getId();
         transactionRepository.createFirstTransaction(idAsset, new FirstTrasaction(typeTransaction, actualPrice, fee, note, (amount+actualPrice+fee), amount));
+        */
     }
 
 

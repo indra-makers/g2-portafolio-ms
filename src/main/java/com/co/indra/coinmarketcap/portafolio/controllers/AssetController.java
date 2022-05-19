@@ -1,15 +1,17 @@
 package com.co.indra.coinmarketcap.portafolio.controllers;
 
+import com.co.indra.coinmarketcap.portafolio.config.Routes;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
+import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
 import com.co.indra.coinmarketcap.portafolio.services.AssetService;
+import com.co.indra.coinmarketcap.portafolio.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/assets")
+@RequestMapping(Routes.ASSETS_RESOURCE)
 public class AssetController {
 
     @Autowired
