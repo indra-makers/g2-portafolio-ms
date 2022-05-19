@@ -39,16 +39,6 @@ public class AssetService {
         Long idAsset =  lst.get(0).getId();
         Transaction transaction = new Transaction(Math.toIntExact(idAsset), firstTrasaction.getTypeTransaction(), firstTrasaction.getDate(), firstTrasaction.getActualPrice(), firstTrasaction.getFee(), firstTrasaction.getNotes(), firstTrasaction.getQuantity(), (firstTrasaction.getQuantity()* firstTrasaction.getActualPrice()* firstTrasaction.getFee()), (int) (firstTrasaction.getQuantity()* firstTrasaction.getActualPrice()));
         portafolioService.createTransaction(transaction, idPortafolio, idAsset);
-
-        //assetRepository.createAsset(new Asset(idPortafolio, idSymbolCoin, quantity, balanceAsset, dollarBalance));
-        //portafolioRepository.recalculateBalanceToPortfolio(idPortafolio);
-
-        /*assetRepository.createAsset(new Asset(idPortafolio, idSymbolCoin, amount, (double) amount, (amount*actualPrice)));
-        List<Asset> lst = assetRepository.getIdAssetByPortafolioAndIdSymbolCoin(idSymbolCoin, idPortafolio);
-        Long idAsset;
-        idAsset = lst.get(0).getId();
-        transactionRepository.createFirstTransaction(idAsset, new FirstTrasaction(typeTransaction, actualPrice, fee, note, (amount+actualPrice+fee), amount));
-        */
     }
 
 
