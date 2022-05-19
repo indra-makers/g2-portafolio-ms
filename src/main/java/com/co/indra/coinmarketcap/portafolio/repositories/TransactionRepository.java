@@ -1,5 +1,6 @@
 package com.co.indra.coinmarketcap.portafolio.repositories;
 
+import com.co.indra.coinmarketcap.portafolio.model.entities.FirstTrasaction;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,18 @@ public class TransactionRepository {
     @Autowired
     private JdbcTemplate template;
 
+
     public void createTransaction (Transaction transaction, Long id){
         template.update("INSERT INTO public.tbl_transactions (id_assets, type_transaction, date, actual_price, fee, notes, quantity, total_recived, amount) VALUES (?,?,?,?,?,?,?,?,?)",
                 id, transaction.getTypeTransaction(), transaction.getDate(), transaction.getActualPrice(), transaction.getFee(), transaction.getNotes(), transaction.getQuantity(), transaction.getTotalRecived(), transaction.getAmount());
+
+    public void createFirstTransaction(Long idAsset, FirstTrasaction firstTrasaction){
+        template.update("INSERT INTO tbl_transactions(id_assets, type_transaction, actual_price, fee, notes, total_recived, amount) values(?,?,?,?,?,?,?)",
+                idAsset, firstTrasaction.getTypeTransaction(),
+                firstTrasaction.getActualPrice(), firstTrasaction.getFee(),
+                firstTrasaction.getNotes(), firstTrasaction.getTotalRecived(),
+                firstTrasaction.getAmount());
+
     }
 
 }

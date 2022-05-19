@@ -123,7 +123,91 @@ public class PortafolioControllerTest {
 
         ErrorResponse error = objectMapper.readValue(response.getContentAsString(), ErrorResponse.class);
         Assertions.assertEquals("Portafolio with that username user not exists", error.getMessage());
+    }
 
+//--------------------------------------------------------------------------------------------------------------------------
+    @Test
+    @Sql("/testdata/get_portafolio.sql")
+    public void createAssetInPortafolioHappyPath() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(Routes.PORTAFOLIO_PATH+Routes.CREATE_ASSET_IN_PORTAFOLIO_BY_IDPORTAFOLIO_PATH, 100)
+                .content("{\n" +
+                        "    \"idSymbolCoin\": \"ASD\",\n" +
+                        "    \"typeTransaction\": \"Compra\",\n" +
+                        "    \"actualPrice\": \"40\",\n" +
+                        "    \"fee\": \"45\",\n" +
+                        "    \"notes\": \"...\",\n" +
+                        "    \"amount\": \"50\"\n" +
+                        "}").contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        Assertions.assertEquals(200, response.getStatus());
+    }
+
+    @Test
+    @Sql("/testdata/get_portafolio.sql")
+    public void createAssetInPortafolioBadPath() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(Routes.PORTAFOLIO_PATH+Routes.CREATE_ASSET_IN_PORTAFOLIO_BY_IDPORTAFOLIO_PATH, "gtr")
+                .content("{\n" +
+                        "    \"idSymbolCoin\": \"ASD\",\n" +
+                        "    \"typeTransaction\": \"Compra\",\n" +
+                        "    \"actualPrice\": \"40\",\n" +
+                        "    \"fee\": \"45\",\n" +
+                        "    \"notes\": \"...\",\n" +
+                        "    \"amount\": \"50\"\n" +
+                        "}").contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        Assertions.assertEquals(500, response.getStatus());
+    }
+
+    @Test
+    @Sql("/testdata/get_portafolio.sql")
+    public void createAssetWithNonExistingPortafolioPath() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(Routes.PORTAFOLIO_PATH+Routes.CREATE_ASSET_IN_PORTAFOLIO_BY_IDPORTAFOLIO_PATH, 99)
+                .content("{\n" +
+                        "    \"idSymbolCoin\": \"ASD\",\n" +
+                        "    \"typeTransaction\": \"Compra\",\n" +
+                        "    \"actualPrice\": \"40\",\n" +
+                        "    \"fee\": \"45\",\n" +
+                        "    \"notes\": \"...\",\n" +
+                        "    \"amount\": \"50\"\n" +
+                        "}").contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        Assertions.assertEquals(404, response.getStatus());
+
+        String textResponse = response.getContentAsString();
+        ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
+
+        Assertions.assertEquals("404", error.getCode());
+        Assertions.assertEquals("Portafolio not found", error.getMessage());
+    }
+
+    @Test
+    @Sql("/testdata/get_assets.sql")
+    public void createAssetWithExitingAssetInPortafolioPath() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(Routes.PORTAFOLIO_PATH+Routes.CREATE_ASSET_IN_PORTAFOLIO_BY_IDPORTAFOLIO_PATH, 100)
+                .content("{\n" +
+                        "    \"idSymbolCoin\": \"XSA\",\n" +
+                        "    \"typeTransaction\": \"Compra\",\n" +
+                        "    \"actualPrice\": \"40\",\n" +
+                        "    \"fee\": \"45\",\n" +
+                        "    \"notes\": \"...\",\n" +
+                        "    \"amount\": \"50\"\n" +
+                        "}").contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        Assertions.assertEquals(412, response.getStatus());
+
+        String textResponse = response.getContentAsString();
+        ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
+
+        Assertions.assertEquals("005", error.getCode());
+        Assertions.assertEquals("Asset already exists in a Portafolio", error.getMessage());
     }
 
     @Test

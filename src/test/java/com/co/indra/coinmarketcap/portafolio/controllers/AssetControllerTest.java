@@ -1,11 +1,11 @@
 package com.co.indra.coinmarketcap.portafolio.controllers;
 
+
 import com.co.indra.coinmarketcap.portafolio.config.Routes;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ErrorResponse;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
-import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -20,8 +20,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.transaction.Transactional;
-import java.util.List;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
@@ -33,6 +31,7 @@ public class AssetControllerTest {
     private AssetRepository assetRepository;
     @Autowired
     private ObjectMapper objectMapper;
+
 
     @Test
     @Sql("/testdata/get_portafolio.sql")
@@ -169,4 +168,5 @@ public class AssetControllerTest {
         Assertions.assertEquals("008", error.getCode());
 
     }
+
 }

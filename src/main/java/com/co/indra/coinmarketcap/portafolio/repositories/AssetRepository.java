@@ -25,6 +25,20 @@ class AssetRowMapper implements RowMapper<Asset> {
     }
 }
 
+class FirstAssetRowMapper implements RowMapper<Asset> {
+    @Override
+    public Asset mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Asset asset = new Asset();
+        asset.setId(rs.getLong("id_assets"));
+        asset.setIdPortafolio(rs.getInt("id_portafolio"));
+        asset.setIdSymbolCoin(rs.getString("id_symbolCoin"));
+        asset.setQuantity(rs.getInt("quantity"));
+        asset.setBalanceAsset(rs.getDouble("balance"));
+        asset.setDollarBalance(rs.getDouble("dollar_balance"));
+        return asset;
+    }
+}
+
 @Repository
 public class AssetRepository {
 
@@ -43,6 +57,7 @@ public class AssetRepository {
                 idSymbolCoin, idPortafolio);
     }
 
+
     public List<Asset> findAssetById(Long id){
         return template.query("SELECT id_portafolio, id_symbolCoin, quantity, balance, dollar_balance FROM public.tbl_assets WHERE id_assets=?",
                new AssetRowMapper(), id );
@@ -52,5 +67,13 @@ public class AssetRepository {
         template.update("UPDATE public.tbl_assets SET quantity=?  WHERE id_assets=?",
                 quantityTransaction, idAsset);
     }
+
+    public List<Asset> getIdAssetByPortafolioAndIdSymbolCoin(String idSymbolCoin, Integer idPortafolio) {
+        return template.query(
+                "SELECT id_assets, id_portafolio, id_symbolCoin, quantity, balance, dollar_balance FROM tbl_assets WHERE id_symbolCoin=? AND id_portafolio=?",
+                new FirstAssetRowMapper(),
+                idSymbolCoin, idPortafolio);
+    }
+
 
 }

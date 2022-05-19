@@ -17,20 +17,5 @@ public class AssetController {
     @Autowired
     private AssetService assetService;
 
-    @Autowired
-    private TransactionService transactionService;
-
-    /**
-     * http://localhost:8080/api/assets/portafolios
-     *   POST /api/assets/portafolios
-     * @param
-     * @return 200 OK
-     */
-    @PostMapping(Routes.PORTAFOLIO_PATH)
-    public void createAsset(@RequestBody Asset asset) {
-        assetService.registerAsset(asset.getIdPortafolio(), asset.getIdSymbolCoin(), asset.getQuantity(), asset.getBalanceAsset(), asset.getDollarBalance());
-    }
-
-
 
 }

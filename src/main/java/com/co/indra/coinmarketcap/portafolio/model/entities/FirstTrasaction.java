@@ -1,76 +1,68 @@
 package com.co.indra.coinmarketcap.portafolio.model.entities;
 
-
-import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Past;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Transaction implements Serializable {
-    private Long id;
-
-    private Integer idAsset;
-
+public class FirstTrasaction implements Serializable {
+    private Long idTransaction;
+    private String idSymbolCoin;
     private String typeTransaction;
-
-    @Past
     private Date date;
-
     private Double actualPrice;
-
     private Double fee;
-
     private String notes;
-
-    private int quantity;
-
     private Double totalRecived;
-
     private int amount;
 
-    public Transaction() {
+    public FirstTrasaction() {
     }
 
-    public Transaction(Long id, Integer idAsset, String typeTransaction, Date date, Double actualPrice, Double fee, String notes, int quantity, Double totalRecived, int amount) {
-        this.id = id;
-        this.idAsset = idAsset;
+    public FirstTrasaction(Long idTransaction, String idSymbolCoin, String typeTransaction, Date date, Double actualPrice, Double fee, String notes, Double totalRecived, int amount) {
+        this.idTransaction = idTransaction;
+        this.idSymbolCoin = idSymbolCoin;
         this.typeTransaction = typeTransaction;
         this.date = date;
         this.actualPrice = actualPrice;
         this.fee = fee;
         this.notes = notes;
-        this.quantity = quantity;
         this.totalRecived = totalRecived;
         this.amount = amount;
     }
 
-    public Transaction(Integer idAsset, String typeTransaction, Date date, Double actualPrice, Double fee, String notes, int quantity, Double totalRecived, int amount) {
-        this.idAsset = idAsset;
+    public FirstTrasaction(String idSymbolCoin, String typeTransaction, Date date, Double actualPrice, Double fee, String notes, Double totalRecived, int amount) {
+        this.idSymbolCoin = idSymbolCoin;
         this.typeTransaction = typeTransaction;
         this.date = date;
         this.actualPrice = actualPrice;
         this.fee = fee;
         this.notes = notes;
-        this.quantity = quantity;
         this.totalRecived = totalRecived;
         this.amount = amount;
     }
 
-    public Long getId() {
-        return id;
+    public FirstTrasaction(String typeTransaction,Double actualPrice, Double fee, String notes, Double totalRecived, int amount) {
+        this.typeTransaction = typeTransaction;
+        this.actualPrice = actualPrice;
+        this.fee = fee;
+        this.notes = notes;
+        this.totalRecived = totalRecived;
+        this.amount = amount;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getIdTransaction() {
+        return idTransaction;
     }
 
-    public Integer getIdAsset() {
-        return idAsset;
+    public void setIdTransaction(Long idTransaction) {
+        this.idTransaction = idTransaction;
     }
 
-    public void setIdAsset(Integer idAsset) {
-        this.idAsset = idAsset;
+    public String getIdSymbolCoin() {
+        return idSymbolCoin;
+    }
+
+    public void setIdSymbolCoin(String idSymbolCoin) {
+        this.idSymbolCoin = idSymbolCoin;
     }
 
     public String getTypeTransaction() {
@@ -127,13 +119,5 @@ public class Transaction implements Serializable {
 
     public void setAmount(int amount) {
         this.amount = amount;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 }

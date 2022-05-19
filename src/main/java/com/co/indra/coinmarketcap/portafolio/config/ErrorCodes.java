@@ -7,7 +7,7 @@ public enum ErrorCodes {
 
     PORTAFOLIO_WITH_USERNAME_NOT_EXISTS("Portafolio with that username user not exists", "003"),
 
-    PORTAFOLIO_NOT_FOUND("Portafolio not found", "004"),
+    PORTAFOLIO_NOT_FOUND("Portafolio not found", "404"),
 
     ASSET_ALREADY_EXISTS_IN_A_PORTAFOLIO("Asset already exists in a Portafolio", "005"),
 
