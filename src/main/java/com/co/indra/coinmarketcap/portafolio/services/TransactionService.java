@@ -23,16 +23,7 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
 
 
-    public void createTransaction(Transaction transaction, Long id){
-        if(assetRepository.findAssetById(id).isEmpty()){
-            throw new NotFoundException(ErrorCodes.ASSET_DOES_NOT_EXISTS.getMessage());
-        }
-        Date today = new Date();
-        if(transaction.getDate().compareTo(today) > 0){
-            throw new BusinessException(ErrorCodes.ASSET_INVALID_DATE);
-        }
-        transactionRepository.createTransaction(transaction, id);
-    }
+
 }
 
 

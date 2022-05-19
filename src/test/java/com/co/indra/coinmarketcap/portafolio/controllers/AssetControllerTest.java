@@ -104,85 +104,69 @@ public class AssetControllerTest {
 
     @Test
     @Sql("/testdata/get_assets.sql")
-    public void createTransactionToAssetHappy() throws Exception{
+    public void updateQuantityAssetToBuy() throws Exception{
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .post(Routes.ASSETS_RESOURCE+Routes.ADD_TRANSACTION_TO_ASSET, 100)
+                .post(Routes.PORTAFOLIO_PATH+Routes.ADD_TRANSACTION_TO_ASSET, 100, 100)
                 .content("{\n" +
                         "    \"typeTransaction\": \"buy\",\n" +
-                        "    \"date\": \"2022-05-18\", \n" +
+                        "    \"date\": \"2022-05-19\", \n" +
                         "    \"actualPrice\": 5000,\n" +
                         "    \"fee\": 3200,\n" +
                         "    \"notes\": \"cualquier cosa\",\n" +
+                        "    \"quantity\": 2,\n" +
                         "    \"totalRecived\": 2,\n" +
                         "    \"amount\": 1\n" +
                         "}").contentType(MediaType.APPLICATION_JSON);
 
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
         Assertions.assertEquals(200, response.getStatus());
+        List<Asset> assets = assetRepository.findAssetById(100l);
+        Assertions.assertEquals(32, assets.get(0).getQuantity());
     }
+
     @Test
     @Sql("/testdata/get_assets.sql")
-    public void createTransactionToAssetBadPath() throws Exception{
+    public void updateQuantityAssetToSellSupport() throws Exception{
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .post(Routes.ASSETS_RESOURCE+Routes.ADD_TRANSACTION_TO_ASSET, 200)
+                .post(Routes.PORTAFOLIO_PATH+Routes.ADD_TRANSACTION_TO_ASSET, 100, 100)
                 .content("{\n" +
-                        "    \"typeTransaction\": \"buy\",\n" +
-                        "    \"date\": \"2022-05-18\", \n" +
+                        "    \"typeTransaction\": \"sell\",\n" +
+                        "    \"date\": \"2022-05-19\", \n" +
                         "    \"actualPrice\": 5000,\n" +
                         "    \"fee\": 3200,\n" +
                         "    \"notes\": \"cualquier cosa\",\n" +
-                        "    \"totalRecived\": 5000,\n" +
+                        "    \"quantity\": 2,\n" +
+                        "    \"totalRecived\": 2,\n" +
                         "    \"amount\": 1\n" +
                         "}").contentType(MediaType.APPLICATION_JSON);
 
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
-        Assertions.assertEquals(404, response.getStatus());
-
-        String textResponse = response.getContentAsString();
-        ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
-        Assertions.assertEquals("NOT_FOUND", error.getCode());
-    }
-    @Test
-    @Sql("/testdata/get_assets.sql")
-    public void createTransactionToAssetBadAmount() throws Exception{
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .post(Routes.ASSETS_RESOURCE+Routes.ADD_TRANSACTION_TO_ASSET, 100)
-                .content("{\n" +
-                        "    \"typeTransaction\": \"buy\",\n" +
-                        "    \"date\": \"2022-05-18\", \n" +
-                        "    \"actualPrice\": 5000,\n" +
-                        "    \"fee\": 3200,\n" +
-                        "    \"notes\": \"cualquier cosa\",\n" +
-                        "    \"totalRecived\": 0,\n" +
-                        "    \"amount\": 1\n" +
-                        "}").contentType(MediaType.APPLICATION_JSON);
-
-        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
-        Assertions.assertEquals(400, response.getStatus());
+        Assertions.assertEquals(200, response.getStatus());
+        List<Asset> assets = assetRepository.findAssetById(100l);
+        Assertions.assertEquals(28, assets.get(0).getQuantity());
     }
 
     @Test
     @Sql("/testdata/get_assets.sql")
-    public void createTransactionToAssetBadDate() throws Exception{
+    public void updateQuantityAssetToSellNotSupport() throws Exception{
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .post(Routes.ASSETS_RESOURCE+Routes.ADD_TRANSACTION_TO_ASSET, 100)
+                .post(Routes.PORTAFOLIO_PATH+Routes.ADD_TRANSACTION_TO_ASSET, 100, 100)
                 .content("{\n" +
-                        "    \"typeTransaction\": \"buy\",\n" +
-                        "    \"date\": \"2022-05-20\", \n" +
+                        "    \"typeTransaction\": \"sell\",\n" +
+                        "    \"date\": \"2022-05-19\", \n" +
                         "    \"actualPrice\": 5000,\n" +
                         "    \"fee\": 3200,\n" +
                         "    \"notes\": \"cualquier cosa\",\n" +
+                        "    \"quantity\": 31,\n" +
                         "    \"totalRecived\": 2,\n" +
                         "    \"amount\": 1\n" +
                         "}").contentType(MediaType.APPLICATION_JSON);
 
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
         Assertions.assertEquals(412, response.getStatus());
-
         String textResponse = response.getContentAsString();
         ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
-        Assertions.assertEquals("007", error.getCode());
-
+        Assertions.assertEquals("008", error.getCode());
 
     }
 }

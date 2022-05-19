@@ -53,14 +53,14 @@ public class PortafolioRepository {
                 new PortafolioRowMapper(), idPortafolio);
     }
 
-    public int sumBalanceAsset(Integer idPortafolio){
+    public int getsumBalanceAsset(Integer idPortafolio){
         return template.queryForObject("SELECT sum(balance) FROM public.tbl_assets WHERE id_portafolio=?"
                 , Integer.class, idPortafolio);
     }
 
     public void recalculateBalanceToPortfolio(Integer idPortafolio){
         template.update("UPDATE public.tbl_portafolios SET balance_portafolio=? WHERE id_portafolio=?",
-               sumBalanceAsset(idPortafolio), idPortafolio);
+               getsumBalanceAsset(idPortafolio), idPortafolio);
     }
 
 }

@@ -48,5 +48,9 @@ public class AssetRepository {
                new AssetRowMapper(), id );
     }
 
+    public void updateQuantityAsset(Long idAsset, int quantityTransaction){
+        template.update("UPDATE public.tbl_assets SET quantity=?  WHERE id_assets=?",
+                quantityTransaction, idAsset);
+    }
 
 }

@@ -2,7 +2,9 @@ package com.co.indra.coinmarketcap.portafolio.controllers;
 
 import com.co.indra.coinmarketcap.portafolio.config.Routes;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
+import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
 import com.co.indra.coinmarketcap.portafolio.services.PortafolioService;
+import com.co.indra.coinmarketcap.portafolio.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,9 @@ public class PortafolioController {
 
     @Autowired
     private PortafolioService portafolioService;
+
+    @Autowired
+    private TransactionService transactionService;
 
     /**
      * http://localhost:8081/api/portafolios
@@ -37,4 +42,8 @@ public class PortafolioController {
         return portafolioService.getPortafolioByUsername(username);
     }
 
+    @PostMapping(Routes.ADD_TRANSACTION_TO_ASSET)
+    public void createTransactionToAsset (@PathVariable ("idPortafolio") Integer idPortfolio, @PathVariable("idAssets") Long idAsset,@Valid @RequestBody Transaction transaction){
+        portafolioService.createTransaction(transaction, idPortfolio, idAsset);
+    }
 }

@@ -14,7 +14,9 @@ public enum ErrorCodes {
     ASSET_DOES_NOT_EXISTS("That asset doesnt exist", "006"),
 
 
-    ASSET_INVALID_DATE("Date must not be greater than the current one", "007");
+    TRANSACTION_INVALID_QUANTITY("Quantity must  be greater than 0", "007"),
+
+    ASSET_QUANTITY_DONT_SUPPORT_SELL("Cannot sell more than the current quantity", "008");
 
     String message;
     String code;

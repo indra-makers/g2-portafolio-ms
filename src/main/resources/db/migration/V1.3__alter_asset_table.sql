@@ -1,0 +1,1 @@
+ALTER TABLE public.tbl_assets ALTER COLUMN id_symbolCoin TYPE varchar(3)

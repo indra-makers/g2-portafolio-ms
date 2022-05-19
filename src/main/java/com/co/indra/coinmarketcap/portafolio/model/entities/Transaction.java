@@ -2,6 +2,7 @@ package com.co.indra.coinmarketcap.portafolio.model.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Past;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,6 +16,7 @@ public class Transaction implements Serializable {
 
     private String typeTransaction;
 
+    @Past
     private Date date;
 
     private Double actualPrice;
@@ -23,8 +25,8 @@ public class Transaction implements Serializable {
 
     private String notes;
 
-    //Este atributo deberia ser quantity
-    @Min(1)
+    private int quantity;
+
     private Double totalRecived;
 
     private int amount;
@@ -32,7 +34,7 @@ public class Transaction implements Serializable {
     public Transaction() {
     }
 
-    public Transaction(Long id, Integer idAsset, String typeTransaction, Date date, Double actualPrice, Double fee, String notes, Double totalRecived, int amount) {
+    public Transaction(Long id, Integer idAsset, String typeTransaction, Date date, Double actualPrice, Double fee, String notes, int quantity, Double totalRecived, int amount) {
         this.id = id;
         this.idAsset = idAsset;
         this.typeTransaction = typeTransaction;
@@ -40,17 +42,19 @@ public class Transaction implements Serializable {
         this.actualPrice = actualPrice;
         this.fee = fee;
         this.notes = notes;
+        this.quantity = quantity;
         this.totalRecived = totalRecived;
         this.amount = amount;
     }
 
-    public Transaction(Integer idAsset, String typeTransaction, Date date, Double actualPrice, Double fee, String notes, Double totalRecived, int amount) {
+    public Transaction(Integer idAsset, String typeTransaction, Date date, Double actualPrice, Double fee, String notes, int quantity, Double totalRecived, int amount) {
         this.idAsset = idAsset;
         this.typeTransaction = typeTransaction;
         this.date = date;
         this.actualPrice = actualPrice;
         this.fee = fee;
         this.notes = notes;
+        this.quantity = quantity;
         this.totalRecived = totalRecived;
         this.amount = amount;
     }
@@ -125,5 +129,13 @@ public class Transaction implements Serializable {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

@@ -31,9 +31,6 @@ public class AssetController {
         assetService.registerAsset(asset.getIdPortafolio(), asset.getIdSymbolCoin(), asset.getQuantity(), asset.getBalanceAsset(), asset.getDollarBalance());
     }
 
-    @PostMapping(Routes.ADD_TRANSACTION_TO_ASSET)
-    public void createTransactionToAsset (@PathVariable("id_assets") Long id,@Valid @RequestBody Transaction transaction){
-        transactionService.createTransaction(transaction, id);
-    }
+
 
 }

@@ -35,8 +35,8 @@ public class TransactionRepository {
     private JdbcTemplate template;
 
     public void createTransaction (Transaction transaction, Long id){
-        template.update("INSERT INTO public.tbl_transactions (id_assets, type_transaction, date, actual_price, fee, notes, total_recived, amount) VALUES (?,?,?,?,?,?,?,?)",
-                id, transaction.getTypeTransaction(), transaction.getDate(), transaction.getActualPrice(), transaction.getFee(), transaction.getNotes(), transaction.getTotalRecived(), transaction.getAmount());
+        template.update("INSERT INTO public.tbl_transactions (id_assets, type_transaction, date, actual_price, fee, notes, quantity, total_recived, amount) VALUES (?,?,?,?,?,?,?,?,?)",
+                id, transaction.getTypeTransaction(), transaction.getDate(), transaction.getActualPrice(), transaction.getFee(), transaction.getNotes(), transaction.getQuantity(), transaction.getTotalRecived(), transaction.getAmount());
     }
 
 }

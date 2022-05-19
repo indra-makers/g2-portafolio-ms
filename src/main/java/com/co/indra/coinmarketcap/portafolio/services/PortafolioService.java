@@ -3,8 +3,12 @@ package com.co.indra.coinmarketcap.portafolio.services;
 import com.co.indra.coinmarketcap.portafolio.config.ErrorCodes;
 import com.co.indra.coinmarketcap.portafolio.exceptions.BusinessException;
 import com.co.indra.coinmarketcap.portafolio.exceptions.NotFoundException;
+import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
+import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
+import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
+import com.co.indra.coinmarketcap.portafolio.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +19,13 @@ public class PortafolioService {
 
     @Autowired
     private PortafolioRepository portafolioRepository;
+
+    @Autowired
+    private AssetRepository assetRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
+
 
     public void registerPortafolio(Portafolio portafolio) {
         List<Portafolio> portafolioByNamePortafolioAndUsername = portafolioRepository.findByNamePortafolioAndUsername(portafolio.getNamePortafolio(), portafolio.getUsername());
@@ -33,5 +44,29 @@ public class PortafolioService {
             return portafolioRepository.findByUsername(username);
         }
 
+    }
+
+    public void createTransaction(Transaction transaction, Integer idPortfolio ,Long idAsset){
+        if(portafolioRepository.findPortafolioByIdPortafolio(idPortfolio).isEmpty()){
+            throw new NotFoundException(ErrorCodes.PORTAFOLIO_NOT_FOUND.getMessage());
+        }
+        if(assetRepository.findAssetById(idAsset).isEmpty()){
+            throw new NotFoundException(ErrorCodes.ASSET_DOES_NOT_EXISTS.getMessage());
+        }
+        if(transaction.getQuantity() <= 0 ){
+            throw new BusinessException(ErrorCodes.TRANSACTION_INVALID_QUANTITY);
+        }
+        if(transaction.getTypeTransaction().equals("buy")){
+            List <Asset> asset=assetRepository.findAssetById(idAsset);
+            assetRepository.updateQuantityAsset(idAsset,  asset.get(0).getQuantity()+ transaction.getQuantity());
+        }
+        else if(transaction.getTypeTransaction().equals("sell")){
+            List <Asset> asset=assetRepository.findAssetById(idAsset);
+            if(asset.get(0).getQuantity() < transaction.getQuantity()){
+                throw new BusinessException(ErrorCodes.ASSET_QUANTITY_DONT_SUPPORT_SELL);
+            }
+            assetRepository.updateQuantityAsset(idAsset,asset.get(0).getQuantity() - transaction.getQuantity() );
+        }
+        transactionRepository.createTransaction(transaction, idAsset);
     }
 }
