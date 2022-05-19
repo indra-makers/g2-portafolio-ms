@@ -7,7 +7,9 @@ public enum ErrorCodes {
 
     PORTAFOLIO_WITH_USERNAME_NOT_EXISTS("Portafolio with that username user not exists", "001"),
 
-    PORTAFOLIO_NOT_FOUND("Portafolio not found", "002");
+    PORTAFOLIO_NOT_FOUND("Portafolio not found", "002"),
+
+    SYMBOL_COIN_NOT_FOUND("Symbol-coin not found", "003");
 
     String message;
     String code;

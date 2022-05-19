@@ -1,8 +1,10 @@
 package com.co.indra.coinmarketcap.portafolio;
 
 import com.co.indra.coinmarketcap.portafolio.config.Routes;
+import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ErrorResponse;
+import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
@@ -17,6 +19,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.util.RouteMatcher;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -31,6 +34,9 @@ public class PortafolioControllerTest {
 
     @Autowired
     private PortafolioRepository portafolioRepository;
+
+    @Autowired
+    private AssetRepository assetRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -117,6 +123,16 @@ public class PortafolioControllerTest {
 
         ErrorResponse error = objectMapper.readValue(response.getContentAsString(), ErrorResponse.class);
         Assertions.assertEquals("Portafolio with that username user not exists", error.getMessage());
+
+    }
+
+    @Test
+    @Sql("/testdata/insert_portafolio_y_asset.sql")
+    public void deleteCoinWatchlistHappyPath() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(Routes.PORTAFOLIO_PATH +Routes.ID_PORTAFOLIO_PATH + Routes.PORTAFOLIO_BY_SYMBOLCOIN_PATH, 111, "CRT");
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        // ------------ las verificaciones--------------------
+        Assertions.assertEquals(200, response.getStatus());
 
     }
 

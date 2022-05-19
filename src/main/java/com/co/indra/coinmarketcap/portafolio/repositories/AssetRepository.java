@@ -36,9 +36,16 @@ public class AssetRepository {
                 symbolCoin, idPortafolio);
     }
 
+    public List<Asset> assetFindByIdPortafolio(int idPortafolio){
+        return template.query(
+                "SELECT id_assets, id_portafolio, id_symbolcoin, quantity, balance, dollar_balance FROM tbl_assets WHERE id_portafolio=?",
+                new AssetRowMapper(),
+                idPortafolio);
+    }
+
     public List<Asset> assetFindByPortafolioAndSimbolicoin(int idPortafolio, String simbolCoin){
         return template.query(
-                "SELECT id_assets, id_portafolio, id_symbolcoin, quantity, balance, dollar_balance FROM tb_assets WHERE id_symbolcoin=? and id_portafolio=?",
+                "SELECT id_assets, id_portafolio, id_symbolcoin, quantity, balance, dollar_balance FROM tbl_assets WHERE id_symbolcoin=? and id_portafolio=?",
                 new AssetRowMapper(),
                 simbolCoin, idPortafolio);
     }
