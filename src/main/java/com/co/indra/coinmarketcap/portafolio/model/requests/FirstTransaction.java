@@ -1,9 +1,9 @@
-package com.co.indra.coinmarketcap.portafolio.model.entities;
+package com.co.indra.coinmarketcap.portafolio.model.requests;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class FirstTrasaction implements Serializable {
+public class FirstTransaction implements Serializable {
     private Long idTransaction;
     private String idSymbolCoin;
     private String typeTransaction;
@@ -13,11 +13,12 @@ public class FirstTrasaction implements Serializable {
     private String notes;
     private Double totalRecived;
     private int amount;
+    private int quantity;
 
-    public FirstTrasaction() {
+    public FirstTransaction() {
     }
 
-    public FirstTrasaction(Long idTransaction, String idSymbolCoin, String typeTransaction, Date date, Double actualPrice, Double fee, String notes, Double totalRecived, int amount) {
+    public FirstTransaction(Long idTransaction, String idSymbolCoin, String typeTransaction, Date date, Double actualPrice, Double fee, String notes, Double totalRecived, int amount, int quantity) {
         this.idTransaction = idTransaction;
         this.idSymbolCoin = idSymbolCoin;
         this.typeTransaction = typeTransaction;
@@ -27,9 +28,20 @@ public class FirstTrasaction implements Serializable {
         this.notes = notes;
         this.totalRecived = totalRecived;
         this.amount = amount;
+        this.quantity = quantity;
     }
 
-    public FirstTrasaction(String idSymbolCoin, String typeTransaction, Date date, Double actualPrice, Double fee, String notes, Double totalRecived, int amount) {
+    public FirstTransaction(String idSymbolCoin, String typeTransaction, Date date, Double actualPrice, Double fee, String notes, int quantity) {
+        this.idSymbolCoin = idSymbolCoin;
+        this.typeTransaction = typeTransaction;
+        this.date = date;
+        this.actualPrice = actualPrice;
+        this.fee = fee;
+        this.notes = notes;
+        this.quantity = quantity;
+    }
+
+    public FirstTransaction(String idSymbolCoin, String typeTransaction, Date date, Double actualPrice, Double fee, String notes, Double totalRecived, int amount, int quantity) {
         this.idSymbolCoin = idSymbolCoin;
         this.typeTransaction = typeTransaction;
         this.date = date;
@@ -38,15 +50,17 @@ public class FirstTrasaction implements Serializable {
         this.notes = notes;
         this.totalRecived = totalRecived;
         this.amount = amount;
+        this.quantity = quantity;
     }
 
-    public FirstTrasaction(String typeTransaction,Double actualPrice, Double fee, String notes, Double totalRecived, int amount) {
+    public FirstTransaction(String typeTransaction, Double actualPrice, Double fee, String notes, Double totalRecived, int amount, int quantity) {
         this.typeTransaction = typeTransaction;
         this.actualPrice = actualPrice;
         this.fee = fee;
         this.notes = notes;
         this.totalRecived = totalRecived;
         this.amount = amount;
+        this.quantity = quantity;
     }
 
     public Long getIdTransaction() {
@@ -119,5 +133,13 @@ public class FirstTrasaction implements Serializable {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

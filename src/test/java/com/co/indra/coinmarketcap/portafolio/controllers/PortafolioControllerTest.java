@@ -134,10 +134,12 @@ public class PortafolioControllerTest {
                 .content("{\n" +
                         "    \"idSymbolCoin\": \"ASD\",\n" +
                         "    \"typeTransaction\": \"Compra\",\n" +
+                        "    \"date\": \"2022-05-19\",\n" +
                         "    \"actualPrice\": \"40\",\n" +
                         "    \"fee\": \"45\",\n" +
                         "    \"notes\": \"...\",\n" +
-                        "    \"amount\": \"50\"\n" +
+                        "    \"amount\": \"50\",\n" +
+                        "    \"quantity\": \"40\"\n" +
                         "}").contentType(MediaType.APPLICATION_JSON);
 
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
@@ -152,10 +154,12 @@ public class PortafolioControllerTest {
                 .content("{\n" +
                         "    \"idSymbolCoin\": \"ASD\",\n" +
                         "    \"typeTransaction\": \"Compra\",\n" +
+                        "    \"date\": \"2022-05-19\",\n" +
                         "    \"actualPrice\": \"40\",\n" +
                         "    \"fee\": \"45\",\n" +
                         "    \"notes\": \"...\",\n" +
-                        "    \"amount\": \"50\"\n" +
+                        "    \"amount\": \"50\",\n" +
+                        "    \"quantity\": \"40\"\n" +
                         "}").contentType(MediaType.APPLICATION_JSON);
 
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
@@ -170,10 +174,12 @@ public class PortafolioControllerTest {
                 .content("{\n" +
                         "    \"idSymbolCoin\": \"ASD\",\n" +
                         "    \"typeTransaction\": \"Compra\",\n" +
+                        "    \"date\": \"2022-05-19\",\n" +
                         "    \"actualPrice\": \"40\",\n" +
                         "    \"fee\": \"45\",\n" +
                         "    \"notes\": \"...\",\n" +
-                        "    \"amount\": \"50\"\n" +
+                        "    \"amount\": \"50\",\n" +
+                        "    \"quantity\": \"40\"\n" +
                         "}").contentType(MediaType.APPLICATION_JSON);
 
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
@@ -194,10 +200,12 @@ public class PortafolioControllerTest {
                 .content("{\n" +
                         "    \"idSymbolCoin\": \"XSA\",\n" +
                         "    \"typeTransaction\": \"Compra\",\n" +
+                        "    \"date\": \"2022-05-19\",\n" +
                         "    \"actualPrice\": \"40\",\n" +
                         "    \"fee\": \"45\",\n" +
                         "    \"notes\": \"...\",\n" +
-                        "    \"amount\": \"50\"\n" +
+                        "    \"amount\": \"50\",\n" +
+                        "    \"quantity\": \"40\"\n" +
                         "}").contentType(MediaType.APPLICATION_JSON);
 
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();

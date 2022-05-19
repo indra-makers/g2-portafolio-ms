@@ -1,8 +1,7 @@
 package com.co.indra.coinmarketcap.portafolio.controllers;
 
 import com.co.indra.coinmarketcap.portafolio.config.Routes;
-import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
-import com.co.indra.coinmarketcap.portafolio.model.entities.FirstTrasaction;
+import com.co.indra.coinmarketcap.portafolio.model.requests.FirstTransaction;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
 import com.co.indra.coinmarketcap.portafolio.services.AssetService;
@@ -65,8 +64,8 @@ public class PortafolioController {
      * @return 200 OK
      */
     @PostMapping(Routes.CREATE_ASSET_IN_PORTAFOLIO_BY_IDPORTAFOLIO_PATH)
-    public void createAsset(@PathVariable("idPortafolio") Integer idPortafolio, @RequestBody FirstTrasaction firstTrasaction) {
-        assetService.registerAsset(idPortafolio, firstTrasaction.getIdSymbolCoin(), firstTrasaction.getTypeTransaction(), firstTrasaction.getActualPrice(), firstTrasaction.getFee(), firstTrasaction.getNotes(), firstTrasaction.getAmount());
+    public void createAsset(@PathVariable("idPortafolio") Integer idPortafolio, @RequestBody FirstTransaction firstTrasaction) {
+        assetService.registerAsset(idPortafolio, firstTrasaction);
     }
 
 
