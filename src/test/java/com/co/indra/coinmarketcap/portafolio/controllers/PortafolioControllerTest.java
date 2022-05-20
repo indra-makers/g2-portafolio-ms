@@ -316,7 +316,7 @@ public class PortafolioControllerTest {
                 .post(Routes.PORTAFOLIO_PATH+Routes.ADD_TRANSACTION_TO_ASSET, 100, 100)
                 .content("{\n" +
                         "    \"typeTransaction\": \"buy\",\n" +
-                        "    \"date\": \"2022-05-20\", \n" +
+                        "    \"date\": \"2027-05-20\", \n" +
                         "    \"actualPrice\": 5000,\n" +
                         "    \"fee\": 3200,\n" +
                         "    \"notes\": \"cualquier cosa\",\n" +
@@ -359,5 +359,49 @@ public class PortafolioControllerTest {
 
     }
 
+    @Test
+    @Sql("/testdata/get_portafolio.sql")
+    public void deletePortafolioHappyPath() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .delete(Routes.PORTAFOLIO_PATH+Routes.ID_PORTAFOLIO_PATH, 100);
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        Assertions.assertEquals(200, response.getStatus());
+    }
 
+    @Test
+    @Sql("/testdata/get_portafolio.sql")
+    public void deletePortafolioBadPath() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .delete(Routes.PORTAFOLIO_PATH+Routes.ID_PORTAFOLIO_PATH, "1fe");
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        Assertions.assertEquals(500, response.getStatus());
+    }
+
+    @Test
+    @Sql("/testdata/get_portafolio.sql")
+    public void deletePortafolioWhenPortafolioNotExistPath() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .delete(Routes.PORTAFOLIO_PATH+Routes.ID_PORTAFOLIO_PATH, 1000);
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        Assertions.assertEquals(404, response.getStatus());
+
+        String textResponse = response.getContentAsString();
+        ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
+        Assertions.assertEquals("404", error.getCode());
+        Assertions.assertEquals("Portafolio not found", error.getMessage());
+    }
+
+    @Test
+    @Sql("/testdata/insert_portafolio_y_asset.sql")
+    public void deletePortafolioWhenThePortafolioHasAssetsPath() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .delete(Routes.PORTAFOLIO_PATH+Routes.ID_PORTAFOLIO_PATH, 111);
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        Assertions.assertEquals(412, response.getStatus());
+
+        String textResponse = response.getContentAsString();
+        ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
+        Assertions.assertEquals("010", error.getCode());
+        Assertions.assertEquals("The Portafolio cannot be deleted because it still contains Assets", error.getMessage());
+    }
 }
