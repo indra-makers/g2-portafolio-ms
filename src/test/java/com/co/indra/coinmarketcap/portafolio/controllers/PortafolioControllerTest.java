@@ -4,9 +4,11 @@ import com.co.indra.coinmarketcap.portafolio.config.Routes;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ErrorResponse;
+import com.co.indra.coinmarketcap.portafolio.model.responses.PortafoliosDistribution;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.util.Lists;
 import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,8 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
@@ -105,8 +109,8 @@ public class PortafolioControllerTest {
         //------------ las verificaciones--------------------
         Assertions.assertEquals(200, response.getStatus());
 
-        Portafolio[] measures = objectMapper.readValue(response.getContentAsString(), Portafolio[].class);
-        Assertions.assertEquals(4, measures.length);
+        Portafolio[] portafolios = objectMapper.readValue(response.getContentAsString(), Portafolio[].class);
+        Assertions.assertEquals(4, portafolios.length);
     }
 
     @Test
@@ -356,6 +360,54 @@ public class PortafolioControllerTest {
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
         // ------------ las verificaciones--------------------
         Assertions.assertEquals(404, response.getStatus());
+
+    }
+
+    @Test
+    @Sql("/testdata/get_portafolio_distribution.sql")
+    public void getPortafolioDistribution() throws Exception {
+        //----la ejecucion de la prueba misma--------------
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(Routes.PORTAFOLIO_PATH+Routes.DISTRIBUTION_BY_IDPORTAFOLIO_PATH, 7)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        //------------ las verificaciones--------------------
+        Assertions.assertEquals(200, response.getStatus());
+
+        List<PortafoliosDistribution> listOfDtos = Lists.newArrayList(
+                new PortafoliosDistribution("BTC", 100.00), new PortafoliosDistribution("ATZ", 20.00));
+
+        String jsonArray = objectMapper.writeValueAsString(listOfDtos);
+
+        List<PortafoliosDistribution> asList = objectMapper.readValue(jsonArray, List.class);
+
+
+        Assertions.assertEquals("[{id_symbolCoin=BTC, average=100.0}, {id_symbolCoin=ATZ, average=20.0}]", asList.toString());
+
+    }
+
+    @Test
+    @Sql("/testdata/get_portafolio_distribution.sql")
+    public void getPortafolioDistributionIdPortafolioNotExist() throws Exception {
+        //----la ejecucion de la prueba misma--------------
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(Routes.PORTAFOLIO_PATH+Routes.DISTRIBUTION_BY_IDPORTAFOLIO_PATH, 10)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        //------------ las verificaciones--------------------
+        Assertions.assertEquals(404, response.getStatus());
+
+        List<PortafoliosDistribution> listOfDtos = Lists.newArrayList();
+
+        String jsonArray = objectMapper.writeValueAsString(listOfDtos);
+
+        List<PortafoliosDistribution> asList = objectMapper.readValue(jsonArray, List.class);
+        String textResponse = response.getContentAsString();
+        ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
+        Assertions.assertEquals("404", error.getCode());
+        Assertions.assertEquals("Portafolio not found", error.getMessage());
 
     }
 

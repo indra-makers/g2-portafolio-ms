@@ -4,6 +4,7 @@ import com.co.indra.coinmarketcap.portafolio.config.Routes;
 import com.co.indra.coinmarketcap.portafolio.model.requests.FirstTransaction;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
+import com.co.indra.coinmarketcap.portafolio.model.responses.PortafoliosDistributionResponse;
 import com.co.indra.coinmarketcap.portafolio.services.AssetService;
 import com.co.indra.coinmarketcap.portafolio.services.PortafolioService;
 import com.co.indra.coinmarketcap.portafolio.services.TransactionService;
@@ -75,6 +76,17 @@ public class PortafolioController {
     @DeleteMapping("/{id_portafolio}/assets/{id_symbolcoin}")
     public void delete( @PathVariable("id_symbolcoin") String idSymbolCoin, @PathVariable("id_portafolio") int idPortafolio) {
         assetService.deleteAsset(idSymbolCoin,idPortafolio);
+    }
+
+    /**
+     * http://localhost:8081/api/portafolio-ms/portafolios/summary/1
+     * GET distribution/1
+     * @param idPortafolio
+     * @return
+     */
+    @GetMapping(Routes.DISTRIBUTION_BY_IDPORTAFOLIO_PATH)
+    public PortafoliosDistributionResponse getAllSummary(@PathVariable("idPortafolio") Integer idPortafolio) {
+        return assetService.getAllSummary(idPortafolio);
     }
 
 }
