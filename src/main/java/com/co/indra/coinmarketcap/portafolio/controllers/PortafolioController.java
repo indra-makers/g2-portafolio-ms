@@ -50,7 +50,7 @@ public class PortafolioController {
     /**
      * http://localhost:8080/api/portafolios/{idPortafolio}/assets/{idAssets}/transaction
      * POST /api/portafolios
-     * @param idPortafolio, idAssets
+     * @param idPortfolio, idAssets
      * @return 200 OK
      */
     @PostMapping(Routes.ADD_TRANSACTION_TO_ASSET)

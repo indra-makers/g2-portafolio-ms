@@ -2,15 +2,18 @@ package com.co.indra.coinmarketcap.portafolio.model.responses;
 
 import java.io.Serializable;
 
-public class PortafoliosDistribution implements Serializable {
+public class PortafoliosDistribution{
 
-    String id_symbolCoin;
-    Double average;
+    private String id_symbolCoin;
+    private Double average;
 
 
     public PortafoliosDistribution(String id_symbolCoin, Double average) {
         this.id_symbolCoin = id_symbolCoin;
         this.average = average;
+    }
+
+    public PortafoliosDistribution() {
     }
 
     public String getId_symbolCoin() {

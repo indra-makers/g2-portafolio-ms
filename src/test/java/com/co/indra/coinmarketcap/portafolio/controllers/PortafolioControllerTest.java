@@ -1,15 +1,13 @@
 package com.co.indra.coinmarketcap.portafolio.controllers;
 
 import com.co.indra.coinmarketcap.portafolio.config.Routes;
-import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ErrorResponse;
-import com.co.indra.coinmarketcap.portafolio.model.responses.PortafoliosDistribution;
+import com.co.indra.coinmarketcap.portafolio.model.responses.PortafoliosDistributionResponse;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.util.Lists;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -320,7 +318,7 @@ public class PortafolioControllerTest {
                 .post(Routes.PORTAFOLIO_PATH+Routes.ADD_TRANSACTION_TO_ASSET, 100, 100)
                 .content("{\n" +
                         "    \"typeTransaction\": \"buy\",\n" +
-                        "    \"date\": \"2028-05-20\", \n" +
+                        "    \"date\": \"2027-05-20\", \n" +
                         "    \"actualPrice\": 5000,\n" +
                         "    \"fee\": 3200,\n" +
                         "    \"notes\": \"cualquier cosa\",\n" +
@@ -368,22 +366,17 @@ public class PortafolioControllerTest {
     public void getPortafolioDistribution() throws Exception {
         //----la ejecucion de la prueba misma--------------
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .get(Routes.PORTAFOLIO_PATH+Routes.DISTRIBUTION_BY_IDPORTAFOLIO_PATH, 7)
+                .get(Routes.PORTAFOLIO_PATH + Routes.DISTRIBUTION_BY_IDPORTAFOLIO_PATH, 7)
                 .contentType(MediaType.APPLICATION_JSON);
 
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
         //------------ las verificaciones--------------------
         Assertions.assertEquals(200, response.getStatus());
 
-        List<PortafoliosDistribution> listOfDtos = Lists.newArrayList(
-                new PortafoliosDistribution("BTC", 100.00), new PortafoliosDistribution("ATZ", 20.00));
+        objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+        PortafoliosDistributionResponse[] assets = objectMapper.readValue(response.getContentAsString(), PortafoliosDistributionResponse[].class);
 
-        String jsonArray = objectMapper.writeValueAsString(listOfDtos);
-
-        List<PortafoliosDistribution> asList = objectMapper.readValue(jsonArray, List.class);
-
-
-        Assertions.assertEquals("[{id_symbolCoin=BTC, average=100.0}, {id_symbolCoin=ATZ, average=20.0}]", asList.toString());
+        Assertions.assertEquals(2, assets[0].getAssets().size());
 
     }
 
@@ -399,13 +392,9 @@ public class PortafolioControllerTest {
         //------------ las verificaciones--------------------
         Assertions.assertEquals(404, response.getStatus());
 
-        List<PortafoliosDistribution> listOfDtos = Lists.newArrayList();
-
-        String jsonArray = objectMapper.writeValueAsString(listOfDtos);
-
-        List<PortafoliosDistribution> asList = objectMapper.readValue(jsonArray, List.class);
         String textResponse = response.getContentAsString();
         ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
+
         Assertions.assertEquals("404", error.getCode());
         Assertions.assertEquals("Portafolio not found", error.getMessage());
 
