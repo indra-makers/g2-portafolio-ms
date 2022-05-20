@@ -53,6 +53,18 @@ public class AssetService {
         }
     }
 
+    //Listar
+    public List<Asset> listAsset(int idPortafolio){
+        //1st
+        if(portafolioRepository.findPortafolioByIdPortafolio(idPortafolio).isEmpty()) {
+            throw new NotFoundException(ErrorCodes.PORTAFOLIO_NOT_FOUND.getMessage());
+        }
+        if(assetRepository.assetFindByIdPortafolio(idPortafolio).isEmpty()){
+            throw new NotFoundException(ErrorCodes.ASSETS_PORTFOLIO_EMPTY.getMessage());
+        }
+        return assetRepository.assetFindByIdPortafolio(idPortafolio);
+    }
+
 
 }
 

@@ -316,7 +316,7 @@ public class PortafolioControllerTest {
                 .post(Routes.PORTAFOLIO_PATH+Routes.ADD_TRANSACTION_TO_ASSET, 100, 100)
                 .content("{\n" +
                         "    \"typeTransaction\": \"buy\",\n" +
-                        "    \"date\": \"2022-05-20\", \n" +
+                        "    \"date\": \"2027-05-20\", \n" +
                         "    \"actualPrice\": 5000,\n" +
                         "    \"fee\": 3200,\n" +
                         "    \"notes\": \"cualquier cosa\",\n" +
@@ -358,6 +358,56 @@ public class PortafolioControllerTest {
         Assertions.assertEquals(404, response.getStatus());
 
     }
+
+    @Test
+    @Sql("/testdata/get_assets.sql")
+    public void getAssetsByPortfolio() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(Routes.PORTAFOLIO_PATH+
+                Routes.CREATE_ASSET_IN_PORTAFOLIO_BY_IDPORTAFOLIO_PATH,100).contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+
+        Assertions.assertEquals(200,response.getStatus());
+        Asset[] assets = objectMapper.readValue(response.getContentAsString(),Asset[].class);
+        Assertions.assertEquals(1,assets.length);
+    }
+
+    @Test
+    @Sql("/testdata/get_assets.sql")
+    public void getAssetsByPortfolioWhenPortfolioNotExists() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(Routes.PORTAFOLIO_PATH+
+                Routes.CREATE_ASSET_IN_PORTAFOLIO_BY_IDPORTAFOLIO_PATH,45).contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+
+        Assertions.assertEquals(404,response.getStatus());
+        ErrorResponse error = objectMapper.readValue(response.getContentAsString(),ErrorResponse.class);
+        Assertions.assertEquals("Portafolio not found",error.getMessage());
+    }
+
+    @Test
+    @Sql("/testdata/get_assets.sql")
+    public void getAssetsEmptyAssetsPortfolioExists() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(Routes.PORTAFOLIO_PATH+
+                Routes.CREATE_ASSET_IN_PORTAFOLIO_BY_IDPORTAFOLIO_PATH,300).contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+
+        Assertions.assertEquals(404,response.getStatus());
+        ErrorResponse error = objectMapper.readValue(response.getContentAsString(),ErrorResponse.class);
+        Assertions.assertEquals("The portfolio does not have any assets",error.getMessage());
+    }
+
+    @Test
+    @Sql("/testdata/get_assets.sql")
+    public void getAssetsIdPortfolioBadParam() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(Routes.PORTAFOLIO_PATH+
+                Routes.CREATE_ASSET_IN_PORTAFOLIO_BY_IDPORTAFOLIO_PATH,"xyz").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+
+        Assertions.assertEquals(500,response.getStatus());
+    }
+
+
+
+
 
 
 }
