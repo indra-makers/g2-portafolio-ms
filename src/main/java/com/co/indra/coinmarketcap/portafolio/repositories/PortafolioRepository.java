@@ -65,6 +65,7 @@ public class PortafolioRepository {
                 getsumBalanceAsset(idPortafolio), idPortafolio);
     }
 
+
     public List<UsersPortfolios> getPortfoliosByUser(String username){
         return template.query("SELECT name_portafolio, balance_portafolio FROM public.tbl_portafolios WHERE username=?",
                 (rs, rn) -> new UsersPortfolios(rs.getString("name_portafolio"),
@@ -74,6 +75,12 @@ public class PortafolioRepository {
     public int getSumOfBalancePortfolios(String username){
         return template.queryForObject("SELECT sum(balance_portafolio) FROM public.tbl_portafolios WHERE username=?",
                 Integer.class, username);
+    }
+
+
+
+    public void deletePortafolio(Long idPortafolio){
+        template.update("DELETE FROM tbl_portafolios WHERE id_portafolio=?", idPortafolio);
     }
 
 
