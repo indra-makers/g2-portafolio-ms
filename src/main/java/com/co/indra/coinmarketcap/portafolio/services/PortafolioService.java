@@ -75,7 +75,7 @@ public class PortafolioService {
             throw new NotFoundException(ErrorCodes.PORTAFOLIO_NOT_FOUND.getMessage());
         }
         if(!assetRepository.findAssetInPortafolioByIdPortafolio((long) idPortafolio).isEmpty()){
-            throw new BusinessException(ErrorCodes.THE_PORTFOLIO_CANNOT_BE_DELETED_BECAUSE_IT_STILL_CONTAINS_ASSETS);
+            throw new BusinessException(ErrorCodes.PORTFOLIO_CANNOT_BE_DELETED);
         }
         portafolioRepository.deletePortafolio((long) idPortafolio);
     }
