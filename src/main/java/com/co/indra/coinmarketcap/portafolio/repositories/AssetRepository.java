@@ -95,6 +95,22 @@ public class AssetRepository {
                 simbolCoin, idPortafolio);
     }
 
+
+    public long findAvgBuyPriceByAsset(long idAsset){
+        return template.queryForObject("SELECT avg_buy_price FROM public.tbl_assets WHERE id_assets=?"
+                , Long.class, idAsset);
+    }
+
+    public long getAvgBuyPriceAsset(long idAsset){
+        return template.queryForObject("SELECT avg(actual_price) FROM public.tbl_transactions WHERE type_transaction ='buy' AND id_assets=?"
+                , Long.class, idAsset);
+    }
+
+    public void recalculateAvgBuyPriceToAsset(Long idAsset){
+        template.update("UPDATE public.tbl_assets SET avg_buy_price=? WHERE id_assets=?",
+                getAvgBuyPriceAsset(idAsset), idAsset);
+    }
+
     public List<PortafoliosDistribution> getSummary(Integer idPortafolio) {
         return template.query("select id_symbolcoin, balance*100/(select SUM(balance) from tbl_assets " +
                         "where id_portafolio =?) percent from tbl_assets where id_portafolio =?",

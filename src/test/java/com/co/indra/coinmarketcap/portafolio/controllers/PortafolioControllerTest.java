@@ -5,10 +5,11 @@ import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ErrorResponse;
-import com.co.indra.coinmarketcap.portafolio.model.responses.PortafoliosDistributionResponse;
+import com.co.indra.coinmarketcap.portafolio.model.responses.ListPortfolio;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.co.indra.coinmarketcap.portafolio.model.responses.PortafoliosDistributionResponse;
 import com.co.indra.coinmarketcap.portafolio.repositories.TransactionRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
@@ -387,6 +388,30 @@ public class PortafolioControllerTest {
     }
 
     @Test
+    @Sql("/testdata/get_portafolios_user.sql")
+    public void getPortfoliosByUsernameHappyPath() throws Exception{
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(Routes.PORTAFOLIO_PATH+Routes.ID_USER_PATH, "carolina");
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+
+        Assertions.assertEquals(200, response.getStatus());
+        objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+        ListPortfolio[] portafolios = objectMapper.readValue(response.getContentAsString(), ListPortfolio[].class);
+        Assertions.assertEquals(1, portafolios.length);
+        Assertions.assertEquals(2, portafolios[0].getPortafolios().size());
+        Assertions.assertEquals(30, portafolioRepository.getSumOfBalancePortfolios("carolina"));
+    }
+
+    @Test
+    @Sql("/testdata/get_portafolios_user.sql")
+    public void getPortfoliosByUsernameNotExists() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(Routes.PORTAFOLIO_PATH + Routes.ID_USER_PATH, "angie");
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+
+        Assertions.assertEquals(412, response.getStatus());
+        String textResponse = response.getContentAsString();
+        ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
+        Assertions.assertEquals("003", error.getCode());
+    }
     @Sql("/testdata/get_portafolio.sql")
     public void deletePortafolioHappyPath() throws Exception {
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
@@ -418,6 +443,7 @@ public class PortafolioControllerTest {
 
         Assertions.assertEquals("404", error.getCode());
         Assertions.assertEquals("Portafolio not found", error.getMessage());
+
 
     }
 

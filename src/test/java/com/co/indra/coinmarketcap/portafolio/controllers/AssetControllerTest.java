@@ -105,4 +105,29 @@ public class AssetControllerTest {
 
     }
 
+    @Test
+    @Sql("/testdata/insert_transactions.sql")
+    public void updateAvgBuyPriceToAssetHappyPath() throws Exception{
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(Routes.PORTAFOLIO_PATH+Routes.ADD_TRANSACTION_TO_ASSET, 100, 100)
+                .content("{\n" +
+                        "    \"typeTransaction\": \"buy\",\n" +
+                        "    \"date\": \"2022-05-19\", \n" +
+                        "    \"actualPrice\": 8000,\n" +
+                        "    \"fee\": 3200,\n" +
+                        "    \"notes\": \"cualquier cosa\",\n" +
+                        "    \"quantity\": 31,\n" +
+                        "    \"totalRecived\": 2,\n" +
+                        "    \"amount\": 1\n" +
+                        "}").contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        Assertions.assertEquals(200, response.getStatus());
+        long r = assetRepository.findAvgBuyPriceByAsset(100l);
+        Assertions.assertEquals(6500, r);
+
+    }
+
+
+
 }
