@@ -85,10 +85,11 @@ public class PortafolioController {
      * @return 200 OK
      */
     @GetMapping(Routes.ID_USER_PATH)
-    public ListPortfolio getPorfoliosByUsername(@PathVariable("username") String username){
+    public ListPortfolio getPorfoliosByUsername(@PathVariable("username") String username) {
         return portafolioService.getPortfoliosByUser(username);
+    }
 
-     * http://localhost:8081/api/portafolio-ms/portafolios/summary/1
+     /** http://localhost:8081/api/portafolio-ms/portafolios/summary/1
      * GET distribution/1
      * @param idPortafolio
      * @return
