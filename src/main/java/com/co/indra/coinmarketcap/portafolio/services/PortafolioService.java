@@ -61,6 +61,8 @@ public class PortafolioService {
         if(transaction.getTypeTransaction().equals("buy")){
             List <Asset> asset=assetRepository.findAssetById(idAsset);
             assetRepository.updateQuantityAsset(idAsset,  asset.get(0).getQuantity()+ transaction.getQuantity());
+            transactionRepository.createTransaction(transaction, idAsset);
+            assetRepository.recalculateAvgBuyPriceToAsset(idAsset);
         }
         else if(transaction.getTypeTransaction().equals("sell")){
             List <Asset> asset=assetRepository.findAssetById(idAsset);
@@ -68,13 +70,15 @@ public class PortafolioService {
                 throw new BusinessException(ErrorCodes.ASSET_QUANTITY_DONT_SUPPORT_SELL);
             }
             assetRepository.updateQuantityAsset(idAsset,asset.get(0).getQuantity() - transaction.getQuantity() );
+            transactionRepository.createTransaction(transaction, idAsset);
         }
-        transactionRepository.createTransaction(transaction, idAsset);
+
+
     }
 
     public ListPortfolio getPortfoliosByUser(String username){
         if(portafolioRepository.findByUsername(username).isEmpty()){
-            throw new NotFoundException(ErrorCodes.PORTAFOLIO_WITH_USERNAME_NOT_EXISTS.getMessage());
+            throw new BusinessException(ErrorCodes.PORTAFOLIO_WITH_USERNAME_NOT_EXISTS);
         }
         return new ListPortfolio(portafolioRepository.getPortfoliosByUser(username), portafolioRepository.getSumOfBalancePortfolios(username));
 

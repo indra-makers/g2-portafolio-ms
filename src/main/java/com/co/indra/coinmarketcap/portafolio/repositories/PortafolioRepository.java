@@ -62,7 +62,7 @@ public class PortafolioRepository {
 
     public void recalculateBalanceToPortfolio(Integer idPortafolio){
         template.update("UPDATE public.tbl_portafolios SET balance_portafolio=? WHERE id_portafolio=?",
-               getsumBalanceAsset(idPortafolio), idPortafolio);
+                getsumBalanceAsset(idPortafolio), idPortafolio);
     }
 
     public List<UsersPortfolios> getPortfoliosByUser(String username){

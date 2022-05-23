@@ -4,8 +4,10 @@ import com.co.indra.coinmarketcap.portafolio.config.Routes;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ErrorResponse;
+import com.co.indra.coinmarketcap.portafolio.model.responses.ListPortfolio;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Assertions;
@@ -359,19 +361,27 @@ public class PortafolioControllerTest {
 
     }
 
+    @Test
+    @Sql("/testdata/get_portafolios_user.sql")
     public void getPortfoliosByUsernameHappyPath() throws Exception{
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(Routes.PORTAFOLIO_PATH, "carolina");
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(Routes.PORTAFOLIO_PATH+Routes.ID_USER_PATH, "carolina");
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
 
         Assertions.assertEquals(200, response.getStatus());
+        objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+        ListPortfolio[] portafolios = objectMapper.readValue(response.getContentAsString(), ListPortfolio[].class);
+        Assertions.assertEquals(1, portafolios.length);
+        Assertions.assertEquals(4, portafolios[0].getPortafolios().size());
         Assertions.assertEquals(160, portafolioRepository.getSumOfBalancePortfolios("carolina"));
     }
 
+    @Test
+    @Sql("/testdata/get_portafolios_user.sql")
     public void getPortfoliosByUsernameNotExists() throws Exception{
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(Routes.PORTAFOLIO_PATH, "angie");
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(Routes.PORTAFOLIO_PATH+Routes.ID_USER_PATH, "angie");
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
 
-        Assertions.assertEquals(404, response.getStatus());
+        Assertions.assertEquals(412, response.getStatus());
         String textResponse = response.getContentAsString();
         ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
         Assertions.assertEquals("003", error.getCode());

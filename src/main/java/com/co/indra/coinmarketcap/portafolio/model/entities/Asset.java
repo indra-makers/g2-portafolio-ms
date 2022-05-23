@@ -18,6 +18,8 @@ public class Asset implements Serializable {
 
     private Double dollarBalance;
 
+    private int avgBuyPrice;
+
     public Asset() {
     }
 
@@ -42,6 +44,11 @@ public class Asset implements Serializable {
         this.quantity = quantity;
         this.balanceAsset = balanceAsset;
         this.dollarBalance = dollarBalance;
+    }
+
+    public Asset(Integer idPortafolio, int avgBuyPrice) {
+        this.idPortafolio = idPortafolio;
+        this.avgBuyPrice = avgBuyPrice;
     }
 
     public Long getId() {
@@ -90,5 +97,13 @@ public class Asset implements Serializable {
 
     public void setDollarBalance(Double dollarBalance) {
         this.dollarBalance = dollarBalance;
+    }
+
+    public int getAvgBuyPrice() {
+        return avgBuyPrice;
+    }
+
+    public void setAvgBuyPrice(int avgBuyPrice) {
+        this.avgBuyPrice = avgBuyPrice;
     }
 }
