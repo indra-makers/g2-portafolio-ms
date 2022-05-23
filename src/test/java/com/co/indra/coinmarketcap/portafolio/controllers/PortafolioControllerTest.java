@@ -356,7 +356,24 @@ public class PortafolioControllerTest {
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
         // ------------ las verificaciones--------------------
         Assertions.assertEquals(404, response.getStatus());
+    }
 
+    @Test
+    @Sql("/testdata/insert_portafolio_y_asset.sql")
+    public void putNombrePortafolioHappyPath() throws Exception{
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("/portafolios/{id_portafolio}/name/{name_portafolio}", 111, "el nuevo nombre");
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+
+        Assertions.assertEquals(200, response.getStatus());
+    }
+
+    @Test
+    @Sql("/testdata/insert_portafolio_y_asset.sql")
+    public void putNombrePortafolioNotExist() throws Exception{
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("/portafolios/{id_portafolio}/name/{name_portafolio}", 1111, "portafolio Not Exist");
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+
+        Assertions.assertEquals(404, response.getStatus());
     }
 
 

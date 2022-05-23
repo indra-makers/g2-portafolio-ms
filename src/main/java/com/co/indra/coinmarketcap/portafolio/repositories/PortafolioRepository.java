@@ -63,4 +63,9 @@ public class PortafolioRepository {
                getsumBalanceAsset(idPortafolio), idPortafolio);
     }
 
+    public void editarPortafolio(String newName, Integer idPortafolio){
+        template.update("UPDATE public.tbl_portafolios SET name_portafolio=? WHERE id_portafolio=? ",
+                newName, idPortafolio);
+    }
+
 }

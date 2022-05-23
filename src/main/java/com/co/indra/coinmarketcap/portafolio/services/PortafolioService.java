@@ -69,4 +69,12 @@ public class PortafolioService {
         }
         transactionRepository.createTransaction(transaction, idAsset);
     }
+
+    public void editarNamePortafolio(String newName, Integer id){
+        if(portafolioRepository.findPortafolioByIdPortafolio(id).isEmpty()){
+            throw new NotFoundException(ErrorCodes.PORTAFOLIO_NOT_FOUND.getMessage());
+        }else{
+            portafolioRepository.editarPortafolio(newName, id);
+        }
+    }
 }

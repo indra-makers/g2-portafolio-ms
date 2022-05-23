@@ -72,9 +72,18 @@ public class PortafolioController {
      * http://localhost:8081/api/portafolio/portafolios/{id_portafolio}/assets/{id_symbolCoin}
      * GET portafolios/users/{username}/portafolios
      */
-    @DeleteMapping("/{id_portafolio}/assets/{id_symbolcoin}")
+    @DeleteMapping(Routes.ID_PORTAFOLIO_PATH+Routes.PORTAFOLIO_BY_SYMBOLCOIN_PATH)
     public void delete( @PathVariable("id_symbolcoin") String idSymbolCoin, @PathVariable("id_portafolio") int idPortafolio) {
         assetService.deleteAsset(idSymbolCoin,idPortafolio);
+    }
+
+    /**
+     * http://localhost:8081/api/portafolio/portafolios/{id_portafolio}/assets/{id_symbolCoin}
+     * GET portafolios/users/{username}/portafolios
+     */
+    @PutMapping(Routes.ID_PORTAFOLIO_PATH+Routes.PORTAFOLIO_BY_NAME_PATH)
+    public void editarPortafolio(@PathVariable("id_portafolio") int idPortafolio, @PathVariable("name_portafolio") String newName) {
+        portafolioService.editarNamePortafolio(newName, idPortafolio);
     }
 
 }
