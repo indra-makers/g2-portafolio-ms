@@ -316,7 +316,7 @@ public class PortafolioControllerTest {
                 .post(Routes.PORTAFOLIO_PATH+Routes.ADD_TRANSACTION_TO_ASSET, 100, 100)
                 .content("{\n" +
                         "    \"typeTransaction\": \"buy\",\n" +
-                        "    \"date\": \"2022-05-20\", \n" +
+                        "    \"date\": \"2023-05-20\", \n" +
                         "    \"actualPrice\": 5000,\n" +
                         "    \"fee\": 3200,\n" +
                         "    \"notes\": \"cualquier cosa\",\n" +
@@ -359,5 +359,22 @@ public class PortafolioControllerTest {
 
     }
 
+    public void getPortfoliosByUsernameHappyPath() throws Exception{
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(Routes.PORTAFOLIO_PATH, "carolina");
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+
+        Assertions.assertEquals(200, response.getStatus());
+        Assertions.assertEquals(160, portafolioRepository.getSumOfBalancePortfolios("carolina"));
+    }
+
+    public void getPortfoliosByUsernameNotExists() throws Exception{
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(Routes.PORTAFOLIO_PATH, "angie");
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+
+        Assertions.assertEquals(404, response.getStatus());
+        String textResponse = response.getContentAsString();
+        ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
+        Assertions.assertEquals("003", error.getCode());
+    }
 
 }

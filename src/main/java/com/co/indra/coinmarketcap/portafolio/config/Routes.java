@@ -11,6 +11,9 @@ public class Routes {
     public static final String CREATE_ASSET_IN_PORTAFOLIO_BY_IDPORTAFOLIO_PATH = "/{idPortafolio}/assets";
 
     public static final String ID_PORTAFOLIO_PATH = "/{id_portafolio}";
+
+    public static final String ID_USER_PATH= "/{username}";
+
     public static final String PORTAFOLIO_BY_SYMBOLCOIN_PATH = "/assets/{id_symbolcoin}";
 
 

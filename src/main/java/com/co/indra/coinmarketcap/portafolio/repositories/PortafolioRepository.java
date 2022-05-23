@@ -2,6 +2,8 @@ package com.co.indra.coinmarketcap.portafolio.repositories;
 
 import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
+import com.co.indra.coinmarketcap.portafolio.model.responses.ListPortfolio;
+import com.co.indra.coinmarketcap.portafolio.model.responses.UsersPortfolios;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -62,5 +64,17 @@ public class PortafolioRepository {
         template.update("UPDATE public.tbl_portafolios SET balance_portafolio=? WHERE id_portafolio=?",
                getsumBalanceAsset(idPortafolio), idPortafolio);
     }
+
+    public List<UsersPortfolios> getPortfoliosByUser(String username){
+        return template.query("SELECT name_portafolio, balance_portafolio FROM public.tbl_portafolios WHERE username=?",
+                (rs, rn) -> new UsersPortfolios(rs.getString("name_portafolio"),
+                        (rs.getInt("balance_portafolio"))), username);
+    }
+
+    public int getSumOfBalancePortfolios(String username){
+        return template.queryForObject("SELECT sum(balance_portafolio) FROM public.tbl_portafolios WHERE username=?",
+                Integer.class, username);
+    }
+
 
 }
