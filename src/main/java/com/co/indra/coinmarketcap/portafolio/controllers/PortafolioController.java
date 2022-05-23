@@ -87,7 +87,7 @@ public class PortafolioController {
     @GetMapping(Routes.DISTRIBUTION_BY_IDPORTAFOLIO_PATH)
     public PortafoliosDistributionResponse getAllSummary(@PathVariable("idPortafolio") Integer idPortafolio) {
         return assetService.getAllSummary(idPortafolio);
-
+    }
      /**
      * http://localhost:8080/api/portafolio-ms/portafolios/{{idPortafolio}}
      *   DELETE /api/portafolio-ms/portafolios/{{idPortafolio}}
