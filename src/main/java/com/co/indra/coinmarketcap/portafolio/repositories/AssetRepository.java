@@ -103,5 +103,10 @@ public class AssetRepository {
                         rs.getDouble("percent")),idPortafolio, idPortafolio);
     }
 
+    public List<Asset> findAssetInPortafolioByIdPortafolio(Long idPortafolio){
+        return template.query("SELECT id_portafolio, id_symbolCoin, quantity, balance, dollar_balance FROM public.tbl_assets WHERE id_portafolio=?",
+                new AssetRowMapper(), idPortafolio );
+    }
+
 
 }

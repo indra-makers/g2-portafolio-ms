@@ -63,4 +63,8 @@ public class PortafolioRepository {
                getsumBalanceAsset(idPortafolio), idPortafolio);
     }
 
+    public void deletePortafolio(Long idPortafolio){
+        template.update("DELETE FROM tbl_portafolios WHERE id_portafolio=?", idPortafolio);
+    }
+
 }
