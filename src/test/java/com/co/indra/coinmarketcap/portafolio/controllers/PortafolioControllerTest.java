@@ -316,7 +316,7 @@ public class PortafolioControllerTest {
                 .post(Routes.PORTAFOLIO_PATH+Routes.ADD_TRANSACTION_TO_ASSET, 100, 100)
                 .content("{\n" +
                         "    \"typeTransaction\": \"buy\",\n" +
-                        "    \"date\": \"2022-05-20\", \n" +
+                        "    \"date\": \"2022-07-20\", \n" +
                         "    \"actualPrice\": 5000,\n" +
                         "    \"fee\": 3200,\n" +
                         "    \"notes\": \"cualquier cosa\",\n" +
