@@ -2,6 +2,7 @@ package com.co.indra.coinmarketcap.portafolio.repositories;
 
 import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
+import com.co.indra.coinmarketcap.portafolio.model.responses.PortafoliosDistribution;
 import org.apache.logging.log4j.spi.ObjectThreadContextMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -94,9 +95,18 @@ public class AssetRepository {
                 simbolCoin, idPortafolio);
     }
 
+    public List<PortafoliosDistribution> getSummary(Integer idPortafolio) {
+        return template.query("select id_symbolcoin, balance*100/(select SUM(balance) from tbl_assets " +
+                        "where id_portafolio =?) percent from tbl_assets where id_portafolio =?",
+
+                (rs, rn) -> new PortafoliosDistribution(rs.getString("id_symbolCoin"),
+                        rs.getDouble("percent")),idPortafolio, idPortafolio);
+    }
+
     public List<Asset> findAssetInPortafolioByIdPortafolio(Long idPortafolio){
         return template.query("SELECT id_portafolio, id_symbolCoin, quantity, balance, dollar_balance FROM public.tbl_assets WHERE id_portafolio=?",
                 new AssetRowMapper(), idPortafolio );
     }
+
 
 }

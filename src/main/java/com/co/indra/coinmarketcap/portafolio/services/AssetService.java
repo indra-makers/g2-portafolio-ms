@@ -6,6 +6,8 @@ import com.co.indra.coinmarketcap.portafolio.exceptions.NotFoundException;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
 import com.co.indra.coinmarketcap.portafolio.model.requests.FirstTransaction;
+import com.co.indra.coinmarketcap.portafolio.model.responses.PortafoliosDistribution;
+import com.co.indra.coinmarketcap.portafolio.model.responses.PortafoliosDistributionResponse;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.TransactionRepository;
@@ -41,6 +43,7 @@ public class AssetService {
         portafolioService.createTransaction(transaction, idPortafolio, idAsset);
     }
 
+
     public void deleteAsset(String symboliCoin, int idPortafolio) {
 
         if(assetRepository.assetFindByIdPortafolio(idPortafolio).isEmpty()){
@@ -51,6 +54,15 @@ public class AssetService {
         }else{
             assetRepository.deleteAsset(symboliCoin, idPortafolio);
         }
+    }
+
+    public PortafoliosDistributionResponse getAllSummary(Integer idPortafolio) {
+        if (portafolioRepository.findPortafolioByIdPortafolio(idPortafolio).isEmpty()) {
+            throw new NotFoundException(ErrorCodes.PORTAFOLIO_NOT_FOUND.getMessage());
+        }
+
+        List<PortafoliosDistribution> list = assetRepository.getSummary(idPortafolio);
+        return new PortafoliosDistributionResponse(list);
     }
 
 

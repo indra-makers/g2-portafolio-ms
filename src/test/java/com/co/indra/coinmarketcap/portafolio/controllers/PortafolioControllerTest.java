@@ -5,11 +5,12 @@ import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ErrorResponse;
+import com.co.indra.coinmarketcap.portafolio.model.responses.PortafoliosDistributionResponse;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.co.indra.coinmarketcap.portafolio.repositories.TransactionRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
@@ -109,8 +112,13 @@ public class PortafolioControllerTest {
         //------------ las verificaciones--------------------
         Assertions.assertEquals(200, response.getStatus());
 
-        Portafolio[] measures = objectMapper.readValue(response.getContentAsString(), Portafolio[].class);
-        Assertions.assertEquals(4, measures.length);
+        Portafolio[] portafolios = objectMapper.readValue(response.getContentAsString(), Portafolio[].class);
+        Assertions.assertEquals("carolina", portafolios[0].getUsername());
+        Assertions.assertEquals("carolina", portafolios[1].getUsername());
+        Assertions.assertEquals("portafolio1", portafolios[0].getNamePortafolio());
+        Assertions.assertEquals("portafolio2", portafolios[1].getNamePortafolio());
+        Assertions.assertEquals(10, portafolios[0].getBalancePortafolio());
+        Assertions.assertEquals(20, portafolios[1].getBalancePortafolio());
     }
 
     @Test
@@ -402,12 +410,15 @@ public class PortafolioControllerTest {
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .delete(Routes.PORTAFOLIO_PATH+Routes.ID_PORTAFOLIO_PATH, 1000);
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+
         Assertions.assertEquals(404, response.getStatus());
 
         String textResponse = response.getContentAsString();
         ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
+
         Assertions.assertEquals("404", error.getCode());
         Assertions.assertEquals("Portafolio not found", error.getMessage());
+
     }
 
     @Test
@@ -422,5 +433,46 @@ public class PortafolioControllerTest {
         ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
         Assertions.assertEquals("010", error.getCode());
         Assertions.assertEquals("The Portafolio cannot be deleted because it still contains Assets", error.getMessage());
+    }
+  
+    @Test
+    @Sql("/testdata/get_portafolio_distribution.sql")
+    public void getPortafolioDistribution() throws Exception {
+        //----la ejecucion de la prueba misma--------------
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(Routes.PORTAFOLIO_PATH + Routes.DISTRIBUTION_BY_IDPORTAFOLIO_PATH, 7)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        //------------ las verificaciones--------------------
+        Assertions.assertEquals(200, response.getStatus());
+
+        objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+        PortafoliosDistributionResponse[] assets = objectMapper.readValue(response.getContentAsString(), PortafoliosDistributionResponse[].class);
+
+        Assertions.assertEquals(42.857142857142854, assets[0].getAssets().get(0).getPercent());
+        Assertions.assertEquals("XSA", assets[0].getAssets().get(0).getIdSymbolCoin());
+        Assertions.assertEquals(57.142857142857146, assets[0].getAssets().get(1).getPercent());
+        Assertions.assertEquals("XOA", assets[0].getAssets().get(1).getIdSymbolCoin());
+        Assertions.assertEquals(2, assets[0].getAssets().size());
+
+    }
+
+    @Test
+    @Sql("/testdata/get_portafolio_distribution.sql")
+    public void getPortafolioDistributionIdPortafolioNotExist() throws Exception {
+        //----la ejecucion de la prueba misma--------------
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(Routes.PORTAFOLIO_PATH+Routes.DISTRIBUTION_BY_IDPORTAFOLIO_PATH, 10)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        //------------ las verificaciones--------------------
+
+        String textResponse = response.getContentAsString();
+        ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
+        Assertions.assertEquals("404", error.getCode());
+        Assertions.assertEquals("Portafolio not found", error.getMessage());
+    
     }
 }

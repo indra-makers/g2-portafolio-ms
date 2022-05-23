@@ -13,6 +13,6 @@ public class Routes {
     public static final String ID_PORTAFOLIO_PATH = "/{id_portafolio}";
     public static final String PORTAFOLIO_BY_SYMBOLCOIN_PATH = "/assets/{id_symbolcoin}";
 
-
+    public static final String DISTRIBUTION_BY_IDPORTAFOLIO_PATH = "/{idPortafolio}/distribution";
 
 }
