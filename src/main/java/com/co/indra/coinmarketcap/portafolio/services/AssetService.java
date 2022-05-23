@@ -12,6 +12,7 @@ import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -54,6 +55,13 @@ public class AssetService {
         }else{
             assetRepository.deleteAsset(symboliCoin, idPortafolio);
         }
+    }
+	
+	public List<Asset> listAssetByPortafolio(int idPortafolio){
+        if(portafolioRepository.findPortafolioByIdPortafolio(idPortafolio).isEmpty()) {
+            throw new NotFoundException(ErrorCodes.PORTAFOLIO_NOT_FOUND.getMessage());
+        }
+        return assetRepository.assetFindByIdPortafolio(idPortafolio);
     }
 
     public PortafoliosDistributionResponse getAllSummary(Integer idPortafolio) {
