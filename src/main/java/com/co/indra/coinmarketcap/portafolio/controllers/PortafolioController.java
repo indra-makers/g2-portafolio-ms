@@ -111,4 +111,15 @@ public class PortafolioController {
 
     }
 
+    /**
+     * http://localhost:8080/api/portafolios/{idPortafolio}/assets/{idAssets}/transaction
+     * GET portafolios/{idPortafolio}/assets/{idAssets}/transaction
+     */
+    @GetMapping(Routes.ADD_TRANSACTION_TO_ASSET)
+    public List<Transaction> getTransactionsOfAAsset(
+            @PathVariable("idPortafolio") int idPortafolio, @PathVariable("idAssets") Long idAsset) {
+
+        return portafolioService.getTransactionsOfAAsset(idPortafolio, idAsset);
+    }
+
 }

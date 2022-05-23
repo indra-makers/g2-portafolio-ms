@@ -94,4 +94,17 @@ public class PortafolioService {
         portafolioRepository.deletePortafolio((long) idPortafolio);
     }
 
+    public List<Transaction> getTransactionsOfAAsset(int idPortafolio, Long idAsset) {
+        if(portafolioRepository.findPortafolioByIdPortafolio(idPortafolio).isEmpty()){
+            throw new NotFoundException(ErrorCodes.PORTAFOLIO_NOT_FOUND.getMessage());
+        }
+        if(assetRepository.findAssetById(idAsset).isEmpty()){
+            throw  new NotFoundException(ErrorCodes.ASSET_DOES_NOT_EXISTS.getMessage());
+        }
+
+        return transactionRepository.findTransactionByIdAsset(idAsset.intValue());
+
+
+    }
+
 }
