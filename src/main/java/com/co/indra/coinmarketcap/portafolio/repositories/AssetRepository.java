@@ -97,10 +97,10 @@ public class AssetRepository {
 
     public List<PortafoliosDistribution> getSummary(Integer idPortafolio) {
         return template.query("select id_symbolcoin, balance*100/(select SUM(balance) from tbl_assets " +
-                        "where id_portafolio =?) average from tbl_assets where id_portafolio =?",
+                        "where id_portafolio =?) percent from tbl_assets where id_portafolio =?",
 
                 (rs, rn) -> new PortafoliosDistribution(rs.getString("id_symbolCoin"),
-                        rs.getDouble("average")),idPortafolio, idPortafolio);
+                        rs.getDouble("percent")),idPortafolio, idPortafolio);
     }
 
 

@@ -108,7 +108,12 @@ public class PortafolioControllerTest {
         Assertions.assertEquals(200, response.getStatus());
 
         Portafolio[] portafolios = objectMapper.readValue(response.getContentAsString(), Portafolio[].class);
-        Assertions.assertEquals(4, portafolios.length);
+        Assertions.assertEquals("carolina", portafolios[0].getUsername());
+        Assertions.assertEquals("carolina", portafolios[1].getUsername());
+        Assertions.assertEquals("portafolio1", portafolios[0].getNamePortafolio());
+        Assertions.assertEquals("portafolio2", portafolios[1].getNamePortafolio());
+        Assertions.assertEquals(10, portafolios[0].getBalancePortafolio());
+        Assertions.assertEquals(20, portafolios[1].getBalancePortafolio());
     }
 
     @Test
@@ -376,6 +381,10 @@ public class PortafolioControllerTest {
         objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
         PortafoliosDistributionResponse[] assets = objectMapper.readValue(response.getContentAsString(), PortafoliosDistributionResponse[].class);
 
+        Assertions.assertEquals(42.857142857142854, assets[0].getAssets().get(0).getPercent());
+        Assertions.assertEquals("XSA", assets[0].getAssets().get(0).getIdSymbolCoin());
+        Assertions.assertEquals(57.142857142857146, assets[0].getAssets().get(1).getPercent());
+        Assertions.assertEquals("XOA", assets[0].getAssets().get(1).getIdSymbolCoin());
         Assertions.assertEquals(2, assets[0].getAssets().size());
 
     }

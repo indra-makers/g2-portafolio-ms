@@ -4,31 +4,31 @@ import java.io.Serializable;
 
 public class PortafoliosDistribution{
 
-    private String id_symbolCoin;
-    private Double average;
+    private String IdSymbolCoin;
+    private Double percent;
 
 
-    public PortafoliosDistribution(String id_symbolCoin, Double average) {
-        this.id_symbolCoin = id_symbolCoin;
-        this.average = average;
+    public PortafoliosDistribution(String id_symbolCoin, Double percent) {
+        this.IdSymbolCoin = id_symbolCoin;
+        this.percent = percent;
     }
 
     public PortafoliosDistribution() {
     }
 
-    public String getId_symbolCoin() {
-        return id_symbolCoin;
+    public String getIdSymbolCoin() {
+        return IdSymbolCoin;
     }
 
-    public void setId_symbolCoin(String id_symbolCoin) {
-        this.id_symbolCoin = id_symbolCoin;
+    public void setIdSymbolCoin(String idSymbolCoin) {
+        IdSymbolCoin = idSymbolCoin;
     }
 
-    public Double getAverage() {
-        return average;
+    public Double getPercent() {
+        return percent;
     }
 
-    public void setAverage(Double average) {
-        this.average = average;
+    public void setPercent(Double percent) {
+        this.percent = percent;
     }
 }
