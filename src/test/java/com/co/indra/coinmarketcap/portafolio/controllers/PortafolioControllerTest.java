@@ -397,21 +397,21 @@ public class PortafolioControllerTest {
         objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
         ListPortfolio[] portafolios = objectMapper.readValue(response.getContentAsString(), ListPortfolio[].class);
         Assertions.assertEquals(1, portafolios.length);
-        Assertions.assertEquals(4, portafolios[0].getPortafolios().size());
-        Assertions.assertEquals(160, portafolioRepository.getSumOfBalancePortfolios("carolina"));
+        Assertions.assertEquals(2, portafolios[0].getPortafolios().size());
+        Assertions.assertEquals(30, portafolioRepository.getSumOfBalancePortfolios("carolina"));
     }
 
     @Test
     @Sql("/testdata/get_portafolios_user.sql")
-    public void getPortfoliosByUsernameNotExists() throws Exception{
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(Routes.PORTAFOLIO_PATH+Routes.ID_USER_PATH, "angie");
+    public void getPortfoliosByUsernameNotExists() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(Routes.PORTAFOLIO_PATH + Routes.ID_USER_PATH, "angie");
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
 
         Assertions.assertEquals(412, response.getStatus());
         String textResponse = response.getContentAsString();
         ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
         Assertions.assertEquals("003", error.getCode());
-
+    }
     @Sql("/testdata/get_portafolio.sql")
     public void deletePortafolioHappyPath() throws Exception {
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
