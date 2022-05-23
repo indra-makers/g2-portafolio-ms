@@ -3,9 +3,11 @@ package com.co.indra.coinmarketcap.portafolio.controllers;
 import com.co.indra.coinmarketcap.portafolio.config.Routes;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
+import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ErrorResponse;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
+import com.co.indra.coinmarketcap.portafolio.repositories.TransactionRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Assertions;
@@ -38,6 +40,8 @@ public class PortafolioControllerTest {
     @Autowired
     private AssetRepository assetRepository;
 
+    @Autowired
+    private TransactionRepository transactionRepository;
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -133,8 +137,8 @@ public class PortafolioControllerTest {
                 .post(Routes.PORTAFOLIO_PATH+Routes.CREATE_ASSET_IN_PORTAFOLIO_BY_IDPORTAFOLIO_PATH, 100)
                 .content("{\n" +
                         "    \"idSymbolCoin\": \"ASD\",\n" +
-                        "    \"typeTransaction\": \"Compra\",\n" +
-                        "    \"date\": \"2022-05-19\",\n" +
+                        "    \"typeTransaction\": \"buy\",\n" +
+                        "    \"date\": \"2022-05-25\",\n" +
                         "    \"actualPrice\": \"40\",\n" +
                         "    \"fee\": \"45\",\n" +
                         "    \"notes\": \"...\",\n" +
@@ -144,6 +148,21 @@ public class PortafolioControllerTest {
 
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
         Assertions.assertEquals(200, response.getStatus());
+
+        List<Asset> lst = assetRepository.getIdAssetByPortafolioAndIdSymbolCoin("ASD", 100);
+        int idAsset = Math.toIntExact(lst.get(0).getId());
+
+        List<Transaction> transaction = transactionRepository.findTransactionByIdAsset(idAsset);
+        Assertions.assertEquals(1, transaction.size());
+
+        Transaction trasactionToAssert = transaction.get(0);
+
+        Assertions.assertEquals("buy", trasactionToAssert.getTypeTransaction());
+        Assertions.assertEquals(40, trasactionToAssert.getActualPrice());
+        Assertions.assertEquals(45, trasactionToAssert.getFee());
+        Assertions.assertEquals("...", trasactionToAssert.getNotes());
+        Assertions.assertEquals(1600, trasactionToAssert.getAmount());
+        Assertions.assertEquals(40, trasactionToAssert.getQuantity());
     }
 
     @Test
