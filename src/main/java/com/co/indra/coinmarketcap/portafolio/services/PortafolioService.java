@@ -69,4 +69,14 @@ public class PortafolioService {
         }
         transactionRepository.createTransaction(transaction, idAsset);
     }
+
+    public void deletePortafolio(int idPortafolio){
+        if (portafolioRepository.findPortafolioByIdPortafolio(idPortafolio).isEmpty()) {
+            throw new NotFoundException(ErrorCodes.PORTAFOLIO_NOT_FOUND.getMessage());
+        }
+        if(!assetRepository.findAssetInPortafolioByIdPortafolio((long) idPortafolio).isEmpty()){
+            throw new BusinessException(ErrorCodes.PORTFOLIO_CANNOT_BE_DELETED);
+        }
+        portafolioRepository.deletePortafolio((long) idPortafolio);
+    }
 }

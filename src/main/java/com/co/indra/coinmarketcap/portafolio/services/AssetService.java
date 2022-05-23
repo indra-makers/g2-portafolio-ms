@@ -37,7 +37,7 @@ public class AssetService {
         assetRepository.createAsset(new Asset(idPortafolio, firstTrasaction.getIdSymbolCoin(), firstTrasaction.getQuantity(), (firstTrasaction.getActualPrice()* firstTrasaction.getQuantity()), (firstTrasaction.getActualPrice()* firstTrasaction.getQuantity())));
         List<Asset> lst = assetRepository.getIdAssetByPortafolioAndIdSymbolCoin(firstTrasaction.getIdSymbolCoin(), idPortafolio);
         Long idAsset =  lst.get(0).getId();
-        Transaction transaction = new Transaction(Math.toIntExact(idAsset), firstTrasaction.getTypeTransaction(), firstTrasaction.getDate(), firstTrasaction.getActualPrice(), firstTrasaction.getFee(), firstTrasaction.getNotes(), firstTrasaction.getQuantity(), (firstTrasaction.getQuantity()* firstTrasaction.getActualPrice()* firstTrasaction.getFee()), (int) (firstTrasaction.getQuantity()* firstTrasaction.getActualPrice()));
+        Transaction transaction = new Transaction(Math.toIntExact(idAsset), firstTrasaction.getTypeTransaction(), firstTrasaction.getDate(), firstTrasaction.getActualPrice(), firstTrasaction.getFee(), firstTrasaction.getNotes(), firstTrasaction.getQuantity(), (firstTrasaction.getQuantity()* firstTrasaction.getActualPrice()+ firstTrasaction.getFee()), (int) (firstTrasaction.getQuantity()* firstTrasaction.getActualPrice()));
         portafolioService.createTransaction(transaction, idPortafolio, idAsset);
     }
 

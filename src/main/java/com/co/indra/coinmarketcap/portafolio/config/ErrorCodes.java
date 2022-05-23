@@ -18,7 +18,9 @@ public enum ErrorCodes {
 
     ASSET_QUANTITY_DONT_SUPPORT_SELL("Cannot sell more than the current quantity", "008"),
 
-    SYMBOL_COIN_NOT_FOUND("Symbol-coin not found", "009");
+    SYMBOL_COIN_NOT_FOUND("Symbol-coin not found", "009"),
+    PORTFOLIO_CANNOT_BE_DELETED ("The Portafolio cannot be deleted because it still contains Assets", "010");
+
 
     String message;
     String code;
