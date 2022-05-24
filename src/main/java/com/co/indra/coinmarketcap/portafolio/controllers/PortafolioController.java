@@ -1,9 +1,12 @@
 package com.co.indra.coinmarketcap.portafolio.controllers;
 
 import com.co.indra.coinmarketcap.portafolio.config.Routes;
+import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.requests.FirstTransaction;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
+import com.co.indra.coinmarketcap.portafolio.model.responses.ListPortfolio;
+import com.co.indra.coinmarketcap.portafolio.model.responses.PortafoliosDistributionResponse;
 import com.co.indra.coinmarketcap.portafolio.services.AssetService;
 import com.co.indra.coinmarketcap.portafolio.services.PortafolioService;
 import com.co.indra.coinmarketcap.portafolio.services.TransactionService;
@@ -49,7 +52,6 @@ public class PortafolioController {
     /**
      * http://localhost:8080/api/portafolios/{idPortafolio}/assets/{idAssets}/transaction
      * POST /api/portafolios
-     * @param idPortafolio, idAssets
      * @return 200 OK
      */
     @PostMapping(Routes.ADD_TRANSACTION_TO_ASSET)
@@ -84,6 +86,43 @@ public class PortafolioController {
     @PutMapping(Routes.ID_PORTAFOLIO_PATH+Routes.PORTAFOLIO_BY_NAME_PATH)
     public void editarPortafolio(@PathVariable("id_portafolio") int idPortafolio, @PathVariable("name_portafolio") String newName) {
         portafolioService.editarNamePortafolio(newName, idPortafolio);
+
+    }
+    /** http://localhost:8080/api/portafolio-ms/portafolios/{username}
+     * GET /api/portafolios
+     * @return 200 OK
+     */
+    @GetMapping(Routes.ID_USER_PATH)
+    public ListPortfolio getPorfoliosByUsername(@PathVariable("username") String username) {
+        return portafolioService.getPortfoliosByUser(username);
+    }
+
+     /** http://localhost:8081/api/portafolio-ms/portafolios/summary/1
+     * GET distribution/1
+     * @param idPortafolio
+     * @return
+     */
+    @GetMapping(Routes.DISTRIBUTION_BY_IDPORTAFOLIO_PATH)
+    public PortafoliosDistributionResponse getAllSummary(@PathVariable("idPortafolio") Integer idPortafolio) {
+        return assetService.getAllSummary(idPortafolio);
+    }
+     /**
+     * http://localhost:8080/api/portafolio-ms/portafolios/{{idPortafolio}}
+     *   DELETE /api/portafolio-ms/portafolios/{{idPortafolio}}
+     * @param
+     * @return 200 OK
+     */
+    @DeleteMapping(Routes.ID_PORTAFOLIO_PATH)
+    public void deletePortafolio(@PathVariable("id_portafolio") Integer idPortafolio) {
+        portafolioService.deletePortafolio(idPortafolio);
+
+
+    }
+	
+	@GetMapping(Routes.CREATE_ASSET_IN_PORTAFOLIO_BY_IDPORTAFOLIO_PATH)
+    public List<Asset> getAssetsByPortafolio(@PathVariable("idPortafolio") int idPortafolio){
+        return assetService.listAssetByPortafolio(idPortafolio);
+
     }
 
 }

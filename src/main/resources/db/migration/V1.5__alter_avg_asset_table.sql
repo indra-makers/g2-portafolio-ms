@@ -1,0 +1,1 @@
+ALTER TABLE public.tbl_assets ADD COLUMN avg_buy_price int

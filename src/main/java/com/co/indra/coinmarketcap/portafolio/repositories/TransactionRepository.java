@@ -1,5 +1,6 @@
 package com.co.indra.coinmarketcap.portafolio.repositories;
 
+import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 class TransactionRowMapper implements RowMapper<Transaction> {
     @Override
@@ -37,14 +39,11 @@ public class TransactionRepository {
     public void createTransaction (Transaction transaction, Long id) {
         template.update("INSERT INTO public.tbl_transactions (id_assets, type_transaction, date, actual_price, fee, notes, quantity, total_recived, amount) VALUES (?,?,?,?,?,?,?,?,?)",
                 id, transaction.getTypeTransaction(), transaction.getDate(), transaction.getActualPrice(), transaction.getFee(), transaction.getNotes(), transaction.getQuantity(), transaction.getTotalRecived(), transaction.getAmount());
+    }
 
-    /*public void createFirstTransaction(Long idAsset, FirstTrasaction firstTrasaction){
-        template.update("INSERT INTO tbl_transactions(id_assets, type_transaction, actual_price, fee, notes, total_recived, amount) values(?,?,?,?,?,?,?)",
-                idAsset, firstTrasaction.getTypeTransaction(),
-                firstTrasaction.getActualPrice(), firstTrasaction.getFee(),
-                firstTrasaction.getNotes(), firstTrasaction.getTotalRecived(),
-                firstTrasaction.getAmount());
-
-    }*/
+    public List<Transaction> findTransactionByIdAsset(int idAsset) {
+        return template.query(
+                "SELECT id_transaction, id_assets, type_transaction, date, actual_price, fee, notes, total_recived, amount, quantity FROM tbl_transactions WHERE id_assets=?",
+                new TransactionRowMapper(), idAsset);
     }
 }

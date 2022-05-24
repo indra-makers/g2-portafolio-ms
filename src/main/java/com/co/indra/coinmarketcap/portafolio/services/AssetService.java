@@ -6,10 +6,13 @@ import com.co.indra.coinmarketcap.portafolio.exceptions.NotFoundException;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
 import com.co.indra.coinmarketcap.portafolio.model.requests.FirstTransaction;
+import com.co.indra.coinmarketcap.portafolio.model.responses.PortafoliosDistribution;
+import com.co.indra.coinmarketcap.portafolio.model.responses.PortafoliosDistributionResponse;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -37,9 +40,10 @@ public class AssetService {
         assetRepository.createAsset(new Asset(idPortafolio, firstTrasaction.getIdSymbolCoin(), firstTrasaction.getQuantity(), (firstTrasaction.getActualPrice()* firstTrasaction.getQuantity()), (firstTrasaction.getActualPrice()* firstTrasaction.getQuantity())));
         List<Asset> lst = assetRepository.getIdAssetByPortafolioAndIdSymbolCoin(firstTrasaction.getIdSymbolCoin(), idPortafolio);
         Long idAsset =  lst.get(0).getId();
-        Transaction transaction = new Transaction(Math.toIntExact(idAsset), firstTrasaction.getTypeTransaction(), firstTrasaction.getDate(), firstTrasaction.getActualPrice(), firstTrasaction.getFee(), firstTrasaction.getNotes(), firstTrasaction.getQuantity(), (firstTrasaction.getQuantity()* firstTrasaction.getActualPrice()* firstTrasaction.getFee()), (int) (firstTrasaction.getQuantity()* firstTrasaction.getActualPrice()));
+        Transaction transaction = new Transaction(Math.toIntExact(idAsset), firstTrasaction.getTypeTransaction(), firstTrasaction.getDate(), firstTrasaction.getActualPrice(), firstTrasaction.getFee(), firstTrasaction.getNotes(), firstTrasaction.getQuantity(), (firstTrasaction.getQuantity()* firstTrasaction.getActualPrice()+ firstTrasaction.getFee()), (int) (firstTrasaction.getQuantity()* firstTrasaction.getActualPrice()));
         portafolioService.createTransaction(transaction, idPortafolio, idAsset);
     }
+
 
     public void deleteAsset(String symboliCoin, int idPortafolio) {
 
@@ -51,6 +55,22 @@ public class AssetService {
         }else{
             assetRepository.deleteAsset(symboliCoin, idPortafolio);
         }
+    }
+	
+	public List<Asset> listAssetByPortafolio(int idPortafolio){
+        if(portafolioRepository.findPortafolioByIdPortafolio(idPortafolio).isEmpty()) {
+            throw new NotFoundException(ErrorCodes.PORTAFOLIO_NOT_FOUND.getMessage());
+        }
+        return assetRepository.assetFindByIdPortafolio(idPortafolio);
+    }
+
+    public PortafoliosDistributionResponse getAllSummary(Integer idPortafolio) {
+        if (portafolioRepository.findPortafolioByIdPortafolio(idPortafolio).isEmpty()) {
+            throw new NotFoundException(ErrorCodes.PORTAFOLIO_NOT_FOUND.getMessage());
+        }
+
+        List<PortafoliosDistribution> list = assetRepository.getSummary(idPortafolio);
+        return new PortafoliosDistributionResponse(list);
     }
 
 
