@@ -366,24 +366,67 @@ public class PortafolioControllerTest {
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
         // ------------ las verificaciones--------------------
         Assertions.assertEquals(200, response.getStatus());
+        List<Object[]> resulst = jdbcTemplate.query("SELECT id_assets, id_portafolio, id_symbolcoin, quantity, balance, dollar_balance FROM tbl_assets where id_portafolio = ?",
+                (rs, rn) -> {
+                    return new Object[] {rs.getObject("id_assets"), rs.getObject("id_portafolio"), rs.getObject("id_symbolcoin"), rs.getObject("quantity"), rs.getObject("balance"), rs.getObject("dollar_balance")};
+                },
+                111);
+
+        Assertions.assertEquals(0, resulst.size());
 
     }
 
     @Test
-    public void deleteAssetofPortafolioIdportafolioNotFound() throws Exception {
+    public void deleteAssetOfPortafolioIdportafolioNotFound() throws Exception {
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(Routes.PORTAFOLIO_PATH +Routes.ID_PORTAFOLIO_PATH + Routes.PORTAFOLIO_BY_SYMBOLCOIN_PATH, 1111, "CRT");
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
         // ------------ las verificaciones--------------------
         Assertions.assertEquals(404, response.getStatus());
 
+        ErrorResponse error = objectMapper.readValue(response.getContentAsString(), ErrorResponse.class);
+        Assertions.assertEquals("Portafolio not found", error.getMessage());
+
     }
 
     @Test
+    @Sql("/testdata/insert_portafolio_y_asset.sql")
     public void deleteAssetWhereIdSymbolicoinlioNotFound() throws Exception {
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(Routes.PORTAFOLIO_PATH +Routes.ID_PORTAFOLIO_PATH + Routes.PORTAFOLIO_BY_SYMBOLCOIN_PATH, 1111, "CRT");
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(Routes.PORTAFOLIO_PATH +Routes.ID_PORTAFOLIO_PATH + Routes.PORTAFOLIO_BY_SYMBOLCOIN_PATH, 111, "CVT");
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
         // ------------ las verificaciones--------------------
         Assertions.assertEquals(404, response.getStatus());
+
+        ErrorResponse error = objectMapper.readValue(response.getContentAsString(), ErrorResponse.class);
+        Assertions.assertEquals("Symbol-coin not found", error.getMessage());
+    }
+
+    @Test
+    @Sql("/testdata/insert_portafolio_y_asset.sql")
+    public void putNombrePortafolioHappyPath() throws Exception{
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("/portafolios/{id_portafolio}/name/{name_portafolio}", 111, "el nuevo nombre");
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+
+        Assertions.assertEquals(200, response.getStatus());
+
+        List<Object[]> resulst = jdbcTemplate.query("SELECT id_portafolio, name_portafolio FROM tbl_portafolios where id_portafolio = ?",
+                (rs, rn) -> {
+                    return new Object[] {rs.getObject("id_portafolio"), rs.getObject("name_portafolio")};
+                },
+                111);
+
+        Assertions.assertEquals(1, resulst.size());
+        Assertions.assertEquals("el nuevo nombre", String.valueOf(resulst.get(0)[1].toString()));
+    }
+
+    @Test
+    @Sql("/testdata/insert_portafolio_y_asset.sql")
+    public void putNombrePortafolioNotExist() throws Exception{
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("/portafolios/{id_portafolio}/name/{name_portafolio}", 1111, "portafolio Not Exist");
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+
+        Assertions.assertEquals(404, response.getStatus());
+        ErrorResponse error = objectMapper.readValue(response.getContentAsString(), ErrorResponse.class);
+        Assertions.assertEquals("Portafolio not found", error.getMessage());
 
     }
 

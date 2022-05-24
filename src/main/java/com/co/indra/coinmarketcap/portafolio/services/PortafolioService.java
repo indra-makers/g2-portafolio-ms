@@ -84,6 +84,15 @@ public class PortafolioService {
 
     }
 
+
+    public void editarNamePortafolio(String newName, Integer id){
+        if(portafolioRepository.findPortafolioByIdPortafolio(id).isEmpty()){
+            throw new NotFoundException(ErrorCodes.PORTAFOLIO_NOT_FOUND.getMessage());
+        }else{
+            portafolioRepository.editarPortafolio(newName, id);
+        }
+    }
+
     public void deletePortafolio(int idPortafolio){
         if (portafolioRepository.findPortafolioByIdPortafolio(idPortafolio).isEmpty()) {
             throw new NotFoundException(ErrorCodes.PORTAFOLIO_NOT_FOUND.getMessage());
@@ -93,5 +102,6 @@ public class PortafolioService {
         }
         portafolioRepository.deletePortafolio((long) idPortafolio);
     }
+
 
 }

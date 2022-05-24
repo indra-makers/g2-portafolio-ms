@@ -66,6 +66,13 @@ public class PortafolioRepository {
     }
 
 
+    public void editarPortafolio(String newName, Integer idPortafolio){
+        template.update("UPDATE public.tbl_portafolios SET name_portafolio=? WHERE id_portafolio=? ",
+                newName, idPortafolio);
+    }
+
+
+
     public List<UsersPortfolios> getPortfoliosByUser(String username){
         return template.query("SELECT name_portafolio, balance_portafolio FROM public.tbl_portafolios WHERE username=?",
                 (rs, rn) -> new UsersPortfolios(rs.getString("name_portafolio"),
@@ -82,6 +89,7 @@ public class PortafolioRepository {
     public void deletePortafolio(Long idPortafolio){
         template.update("DELETE FROM tbl_portafolios WHERE id_portafolio=?", idPortafolio);
     }
+
 
 
 }
