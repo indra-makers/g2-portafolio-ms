@@ -1,6 +1,7 @@
 package com.co.indra.coinmarketcap.portafolio.controllers;
 
 import com.co.indra.coinmarketcap.portafolio.config.Routes;
+import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.requests.FirstTransaction;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
@@ -109,6 +110,11 @@ public class PortafolioController {
         portafolioService.deletePortafolio(idPortafolio);
 
 
+    }
+	
+	@GetMapping(Routes.CREATE_ASSET_IN_PORTAFOLIO_BY_IDPORTAFOLIO_PATH)
+    public List<Asset> getAssetsByPortafolio(@PathVariable("idPortafolio") int idPortafolio){
+        return assetService.listAssetByPortafolio(idPortafolio);
     }
 
 }
