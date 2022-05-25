@@ -22,6 +22,13 @@ public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    public void editarTransaccionById(Transaction transaction, Long idTransaction){
+        if(transactionRepository.findTransactionById(idTransaction).isEmpty()){
+            throw new NotFoundException(ErrorCodes.TRANSACTION_NOT_FOUND.getMessage());
+        }else{
+            transactionRepository.editarTransaction(transaction, idTransaction);
+        }
+    }
 
 
 }

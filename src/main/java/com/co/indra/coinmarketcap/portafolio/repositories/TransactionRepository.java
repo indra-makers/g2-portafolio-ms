@@ -1,6 +1,5 @@
 package com.co.indra.coinmarketcap.portafolio.repositories;
 
-import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -46,4 +45,16 @@ public class TransactionRepository {
                 "SELECT id_transaction, id_assets, type_transaction, date, actual_price, fee, notes, total_recived, amount, quantity FROM tbl_transactions WHERE id_assets=?",
                 new TransactionRowMapper(), idAsset);
     }
+
+    public List<Transaction>  findTransactionById(Long idTransaction) {
+        return template.query(
+                "SELECT id_transaction, id_assets, type_transaction, date, actual_price, fee, notes, total_recived, amount, quantity FROM tbl_transactions WHERE id_transaction=?",
+                new TransactionRowMapper(), idTransaction);
+    }
+
+    public void editarTransaction(Transaction transaction, Long idTransaction){
+        template.update("UPDATE public.tbl_transactions SET date=?, actual_price=?, fee=?, notes=?, total_recived=?, amount=?, quantity=? WHERE id_transaction=?",
+                transaction.getDate(), transaction.getActualPrice(), transaction.getFee(), transaction.getNotes(), transaction.getTotalRecived(), transaction.getAmount(), transaction.getQuantity(), idTransaction);
+    }
+
 }
