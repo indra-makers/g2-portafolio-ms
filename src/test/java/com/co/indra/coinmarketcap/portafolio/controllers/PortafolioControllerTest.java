@@ -590,6 +590,30 @@ public class PortafolioControllerTest {
     }
 
     @Test
+    @Sql("/testdata/get_transaction_of_a_assets.sql")
+    public void getTransactionOfAAssets() throws Exception{
+        //----la ejecucion de la prueba misma--------------
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(Routes.PORTAFOLIO_PATH+Routes.ADD_TRANSACTION_TO_ASSET, 10,6)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        //------------ las verificaciones--------------------
+        Assertions.assertEquals(200, response.getStatus());
+
+        Transaction[] transactions = objectMapper.readValue(response.getContentAsString(), Transaction[].class);
+
+        Assertions.assertEquals(3, transactions[1].getId());
+        Assertions.assertEquals(6, transactions[1].getIdAsset());
+        Assertions.assertEquals("buy", transactions[1].getTypeTransaction());
+        Assertions.assertEquals(7000.0, transactions[1].getActualPrice());
+        Assertions.assertEquals(7, transactions[0].getId());
+        Assertions.assertEquals(6, transactions[0].getIdAsset());
+        Assertions.assertEquals("buy", transactions[0].getTypeTransaction());
+        Assertions.assertEquals(6000.0, transactions[0].getActualPrice());
+    }
+    
+    @Test
     @Sql("/testdata/insert_OneTransaction.sql")
     public void putTransactionHappyPath() throws Exception{
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
@@ -619,6 +643,22 @@ public class PortafolioControllerTest {
     }
 
     @Test
+    @Sql("/testdata/get_transaction_of_a_assets.sql")
+    public void getTransactionOfAAssetsWhenIdAssetsNotExist() throws Exception{
+        //----la ejecucion de la prueba misma--------------
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(Routes.PORTAFOLIO_PATH+Routes.ADD_TRANSACTION_TO_ASSET, 12,5)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        //------------ las verificaciones--------------------
+
+        String textResponse = response.getContentAsString();
+        ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
+        Assertions.assertEquals("404", error.getCode());
+        Assertions.assertEquals("That asset doesnt exist", error.getMessage());
+    }
+  
     @Sql("/testdata/insert_portafolio_y_asset.sql")
     public void putTransactionWhenNotExist() throws Exception{
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
