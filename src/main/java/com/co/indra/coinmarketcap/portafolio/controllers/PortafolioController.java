@@ -115,14 +115,20 @@ public class PortafolioController {
     @DeleteMapping(Routes.ID_PORTAFOLIO_PATH)
     public void deletePortafolio(@PathVariable("id_portafolio") Integer idPortafolio) {
         portafolioService.deletePortafolio(idPortafolio);
-
-
     }
 	
 	@GetMapping(Routes.CREATE_ASSET_IN_PORTAFOLIO_BY_IDPORTAFOLIO_PATH)
     public List<Asset> getAssetsByPortafolio(@PathVariable("idPortafolio") int idPortafolio){
         return assetService.listAssetByPortafolio(idPortafolio);
+    }
 
+    /**
+     * http://localhost:8081/api/portafolio/portafolios/assets/transactions/{id_transaction}
+     * PUT portafolios/assets/transactions/{id_transaction}
+     */
+    @PutMapping("assets/transactions/{id_transaction}")
+    public void editarTransaction(@PathVariable("id_transaction") Long idTransaction, @RequestBody Transaction transaction) {
+        transactionService.editarTransaccionById(transaction, idTransaction);
     }
 
 

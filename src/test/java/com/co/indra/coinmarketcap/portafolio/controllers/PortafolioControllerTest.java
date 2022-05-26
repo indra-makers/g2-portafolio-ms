@@ -611,6 +611,34 @@ public class PortafolioControllerTest {
         Assertions.assertEquals(6, transactions[0].getIdAsset());
         Assertions.assertEquals("buy", transactions[0].getTypeTransaction());
         Assertions.assertEquals(6000.0, transactions[0].getActualPrice());
+    }
+    
+    @Test
+    @Sql("/testdata/insert_OneTransaction.sql")
+    public void putTransactionHappyPath() throws Exception{
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put("/portafolios/assets/transactions/{id_transaction}", 111)
+                .content("{\n" +
+                        "    \"date\": \"2022-09-05\",\n" +
+                        "    \"actualPrice\": \"123\",\n" +
+                        "    \"fee\": \"123\",\n" +
+                        "    \"notes\": \"new notes\",\n" +
+                        "    \"totalRecived\": \"123\",\n" +
+                        "    \"amount\": \"123\",\n" +
+                        "    \"quantity\": \"40\"\n" +
+                        "}").contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        Assertions.assertEquals(200, response.getStatus());
+
+        List<Object[]> resulst = jdbcTemplate.query("SELECT id_transaction, notes FROM tbl_transactions where id_transaction = ?",
+                (rs, rn) -> {
+                    return new Object[] {rs.getObject("id_transaction"), rs.getObject("notes")};
+                },
+                111);
+
+        Assertions.assertEquals(1, resulst.size());
+        Assertions.assertEquals("new notes", String.valueOf(resulst.get(0)[1].toString()));
 
     }
 
@@ -629,6 +657,27 @@ public class PortafolioControllerTest {
         ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
         Assertions.assertEquals("404", error.getCode());
         Assertions.assertEquals("That asset doesnt exist", error.getMessage());
+    }
+  
+    @Sql("/testdata/insert_portafolio_y_asset.sql")
+    public void putTransactionWhenNotExist() throws Exception{
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put("/portafolios/assets/transactions/{id_transaction}", 12)
+                .content("{\n" +
+                        "    \"date\": \"2022-09-05\",\n" +
+                        "    \"actualPrice\": \"123\",\n" +
+                        "    \"fee\": \"123\",\n" +
+                        "    \"notes\": \"new notes\",\n" +
+                        "    \"totalRecived\": \"123\",\n" +
+                        "    \"amount\": \"123\",\n" +
+                        "    \"quantity\": \"40\"\n" +
+                        "}").contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        Assertions.assertEquals(404, response.getStatus());
+
+        ErrorResponse error = objectMapper.readValue(response.getContentAsString(), ErrorResponse.class);
+        Assertions.assertEquals("Transaction not found", error.getMessage());
 
     }
 }
