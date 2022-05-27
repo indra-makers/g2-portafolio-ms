@@ -9,6 +9,7 @@ import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ListPortfolio;
 import com.co.indra.coinmarketcap.portafolio.model.responses.UsersPortfolios;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
+import com.co.indra.coinmarketcap.portafolio.repositories.HistoryAssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class PortafolioService {
 
     @Autowired
     private TransactionRepository transactionRepository;
+
+    @Autowired
+    private HistoryAssetRepository historyAssetRepository;
 
 
     public void registerPortafolio(Portafolio portafolio) {
@@ -58,17 +62,20 @@ public class PortafolioService {
         if(transaction.getQuantity() <= 0 ){
             throw new BusinessException(ErrorCodes.TRANSACTION_INVALID_QUANTITY);
         }
+
+        List <Asset> asset=assetRepository.findAssetById(idAsset);
+        asset.get(0).setId(idAsset);
         if(transaction.getTypeTransaction().equals("buy")){
-            List <Asset> asset=assetRepository.findAssetById(idAsset);
+            historyAssetRepository.addHistory(asset.get(0));
             assetRepository.updateQuantityAsset(idAsset,  asset.get(0).getQuantity()+ transaction.getQuantity());
             transactionRepository.createTransaction(transaction, idAsset);
             assetRepository.recalculateAvgBuyPriceToAsset(idAsset);
         }
         else if(transaction.getTypeTransaction().equals("sell")){
-            List <Asset> asset=assetRepository.findAssetById(idAsset);
             if(asset.get(0).getQuantity() < transaction.getQuantity()){
                 throw new BusinessException(ErrorCodes.ASSET_QUANTITY_DONT_SUPPORT_SELL);
             }
+            historyAssetRepository.addHistory(asset.get(0));
             assetRepository.updateQuantityAsset(idAsset,asset.get(0).getQuantity() - transaction.getQuantity() );
             transactionRepository.createTransaction(transaction, idAsset);
         }
