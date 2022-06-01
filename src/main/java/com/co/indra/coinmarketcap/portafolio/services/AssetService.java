@@ -9,6 +9,7 @@ import com.co.indra.coinmarketcap.portafolio.model.requests.FirstTransaction;
 import com.co.indra.coinmarketcap.portafolio.model.responses.PortafoliosDistribution;
 import com.co.indra.coinmarketcap.portafolio.model.responses.PortafoliosDistributionResponse;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
+import com.co.indra.coinmarketcap.portafolio.repositories.HistoryAssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class AssetService {
     private TransactionRepository transactionRepository;
     @Autowired
     private PortafolioService portafolioService;
+    @Autowired
+    private HistoryAssetRepository historyAssetRepository;
 
     public void registerAsset(Integer idPortafolio, FirstTransaction firstTrasaction){
         if (portafolioRepository.findPortafolioByIdPortafolio(idPortafolio).isEmpty()) {
@@ -40,6 +43,7 @@ public class AssetService {
         assetRepository.createAsset(new Asset(idPortafolio, firstTrasaction.getIdSymbolCoin(), firstTrasaction.getQuantity(), (firstTrasaction.getActualPrice()* firstTrasaction.getQuantity()), (firstTrasaction.getActualPrice()* firstTrasaction.getQuantity())));
         List<Asset> lst = assetRepository.getIdAssetByPortafolioAndIdSymbolCoin(firstTrasaction.getIdSymbolCoin(), idPortafolio);
         Long idAsset =  lst.get(0).getId();
+        historyAssetRepository.addHistory(new Asset(lst.get(0).getId(), lst.get(0).getIdPortafolio(), lst.get(0).getIdSymbolCoin(), lst.get(0).getQuantity(), lst.get(0).getBalanceAsset(), lst.get(0).getDollarBalance()));
         Transaction transaction = new Transaction(Math.toIntExact(idAsset), firstTrasaction.getTypeTransaction(), firstTrasaction.getDate(), firstTrasaction.getActualPrice(), firstTrasaction.getFee(), firstTrasaction.getNotes(), firstTrasaction.getQuantity(), (firstTrasaction.getQuantity()* firstTrasaction.getActualPrice()+ firstTrasaction.getFee()), (int) (firstTrasaction.getQuantity()* firstTrasaction.getActualPrice()));
         portafolioService.createTransaction(transaction, idPortafolio, idAsset);
     }
