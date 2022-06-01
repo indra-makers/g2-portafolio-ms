@@ -2,12 +2,15 @@ package com.co.indra.coinmarketcap.portafolio.repositories;
 
 import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
+import com.co.indra.coinmarketcap.portafolio.model.entities.UserApi;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ListPortfolio;
 import com.co.indra.coinmarketcap.portafolio.model.responses.UsersPortfolios;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.client.RestTemplate;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,6 +31,10 @@ class PortafolioRowMapper implements RowMapper<Portafolio> {
 @Repository
 public class PortafolioRepository {
 
+    private final RestTemplate restTemplate;
+    public PortafolioRepository(RestTemplateBuilder restTemplateBuilder) {
+        this.restTemplate = restTemplateBuilder.build();
+    }
     @Autowired
     private JdbcTemplate template;
 
@@ -90,6 +97,10 @@ public class PortafolioRepository {
         template.update("DELETE FROM tbl_portafolios WHERE id_portafolio=?", idPortafolio);
     }
 
+    public UserApi getPostsPlainJSON(String username) {
+        String url = "https://g2-users-ms.herokuapp.com/api/users-ms/users/" + username;
+        return this.restTemplate.getForObject(url, UserApi.class);
 
+    }
 
 }
