@@ -7,10 +7,12 @@ import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ListPortfolio;
+import com.co.indra.coinmarketcap.portafolio.model.responses.UserResponse;
 import com.co.indra.coinmarketcap.portafolio.model.responses.UsersPortfolios;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.TransactionRepository;
+import com.co.indra.coinmarketcap.portafolio.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,16 +29,22 @@ public class PortafolioService {
 
     @Autowired
     private TransactionRepository transactionRepository;
+    @Autowired
+    private UserRepository userRepository;
 
 
     public void registerPortafolio(Portafolio portafolio) {
         List<Portafolio> portafolioByNamePortafolioAndUsername = portafolioRepository.findByNamePortafolioAndUsername(portafolio.getNamePortafolio(), portafolio.getUsername());
-
+        try{
+            UserResponse user = userRepository.getUserFromUsersmsByUsername(portafolio.getUsername());
+        }
+        catch (Exception e){
+            throw new NotFoundException(ErrorCodes.USERNAME_NOT_FOUND.getMessage());
+        }
         if(!portafolioByNamePortafolioAndUsername.isEmpty()) {
             throw new BusinessException(ErrorCodes.PORTAFOLIO_WITH_NAME_EXISTS);
-        }else{
-            portafolioRepository.create(portafolio);
         }
+        portafolioRepository.create(portafolio);
     }
 
     public List<Portafolio> getPortafolioByUsername(String username) {

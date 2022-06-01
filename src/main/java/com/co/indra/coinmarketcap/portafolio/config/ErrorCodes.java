@@ -21,8 +21,8 @@ public enum ErrorCodes {
     SYMBOL_COIN_NOT_FOUND("Symbol-coin not found", "009"),
     PORTFOLIO_CANNOT_BE_DELETED ("The Portafolio cannot be deleted because it still contains Assets", "010"),
 
-    TRANSACTION_NOT_FOUND("Transaction not found", "010");
-
+    TRANSACTION_NOT_FOUND("Transaction not found", "010"),
+    USERNAME_NOT_FOUND("Username not found", "011");
 
     String message;
     String code;
