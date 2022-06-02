@@ -35,12 +35,7 @@ public class PortafolioService {
 
     public void registerPortafolio(Portafolio portafolio) {
         List<Portafolio> portafolioByNamePortafolioAndUsername = portafolioRepository.findByNamePortafolioAndUsername(portafolio.getNamePortafolio(), portafolio.getUsername());
-        try{
-            UserResponse user = userRepository.getUserFromUsersmsByUsername(portafolio.getUsername());
-        }
-        catch (Exception e){
-            throw new NotFoundException(ErrorCodes.USERNAME_NOT_FOUND.getMessage());
-        }
+        userRepository.getUserFromUsersmsByUsername(portafolio.getUsername());
         if(!portafolioByNamePortafolioAndUsername.isEmpty()) {
             throw new BusinessException(ErrorCodes.PORTAFOLIO_WITH_NAME_EXISTS);
         }
