@@ -727,6 +727,10 @@ public class PortafolioControllerTest {
 
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
         Assertions.assertEquals(404, response.getStatus());
+        String textResponse = response.getContentAsString();
+        ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
+        Assertions.assertEquals("API EXTERNAL", error.getCode());
+        Assertions.assertEquals("USER NOT FOUND", error.getMessage());
     }
 
     @Test
@@ -745,8 +749,8 @@ public class PortafolioControllerTest {
 
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
         Assertions.assertEquals(412, response.getStatus());
-        String textREsponse = response.getContentAsString();
-        ErrorResponse error = objectMapper.readValue(textREsponse, ErrorResponse.class);
+        String textResponse = response.getContentAsString();
+        ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
         Assertions.assertEquals("002", error.getCode());
         Assertions.assertEquals("Portafolio with that name already exists", error.getMessage());
 
