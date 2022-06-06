@@ -48,5 +48,4 @@ public class CustomExceptionHandler {
     public ErrorResponse handleNotFoundHttpClientErrorException(HttpClientErrorException.NotFound exception) {
         return new ErrorResponse("API EXTERNAL", "USER NOT FOUND");
     }
-
 }

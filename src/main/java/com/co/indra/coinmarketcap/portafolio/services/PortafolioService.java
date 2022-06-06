@@ -1,5 +1,6 @@
 package com.co.indra.coinmarketcap.portafolio.services;
 
+import com.co.indra.coinmarketcap.portafolio.api.service.UserService;
 import com.co.indra.coinmarketcap.portafolio.config.ErrorCodes;
 import com.co.indra.coinmarketcap.portafolio.exceptions.BusinessException;
 import com.co.indra.coinmarketcap.portafolio.exceptions.NotFoundException;
@@ -7,15 +8,14 @@ import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ListPortfolio;
-import com.co.indra.coinmarketcap.portafolio.model.responses.UserResponse;
-import com.co.indra.coinmarketcap.portafolio.model.responses.UsersPortfolios;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.TransactionRepository;
-import com.co.indra.coinmarketcap.portafolio.repositories.UserRepository;
+import com.co.indra.coinmarketcap.portafolio.api.clients.UserClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -30,12 +30,12 @@ public class PortafolioService {
     @Autowired
     private TransactionRepository transactionRepository;
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
 
-    public void registerPortafolio(Portafolio portafolio) {
+    public void registerPortafolio(Portafolio portafolio) throws IOException {
         List<Portafolio> portafolioByNamePortafolioAndUsername = portafolioRepository.findByNamePortafolioAndUsername(portafolio.getNamePortafolio(), portafolio.getUsername());
-        userRepository.getUserFromUsersmsByUsername(portafolio.getUsername());
+        userService.getUserFromUsersmsByUsername(portafolio.getUsername());
         if(!portafolioByNamePortafolioAndUsername.isEmpty()) {
             throw new BusinessException(ErrorCodes.PORTAFOLIO_WITH_NAME_EXISTS);
         }

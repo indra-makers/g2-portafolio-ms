@@ -6,7 +6,7 @@ import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ErrorResponse;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ListPortfolio;
-import com.co.indra.coinmarketcap.portafolio.model.responses.UserResponse;
+import com.co.indra.coinmarketcap.portafolio.api.model.UserResponse;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -32,8 +32,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest

@@ -1,16 +1,11 @@
 package com.co.indra.coinmarketcap.portafolio.repositories;
 
-import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
-import com.co.indra.coinmarketcap.portafolio.model.responses.ListPortfolio;
-import com.co.indra.coinmarketcap.portafolio.model.responses.UserResponse;
 import com.co.indra.coinmarketcap.portafolio.model.responses.UsersPortfolios;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.client.RestTemplate;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
