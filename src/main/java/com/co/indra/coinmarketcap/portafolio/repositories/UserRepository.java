@@ -21,10 +21,6 @@ public class UserRepository {
 
     public UserResponse getUserFromUsersmsByUsername(String username) {
         String url = "https://g2-users-ms.herokuapp.com/api/users-ms/users/" + username;
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-        if (response.getStatusCode() != HttpStatus.OK) {
-            throw new BusinessException(ErrorCodes.USERNAME_NOT_FOUND.getMessage());
-        }
         ResponseEntity<UserResponse> responseUser = restTemplate.getForEntity(url, UserResponse.class);
         UserResponse body = responseUser.getBody();
         return new UserResponse(body.getUsername(), body.getMail(), body.getDisplayName(), body.getIdCategoryUser());
