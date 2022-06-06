@@ -1,4 +1,4 @@
-package com.co.indra.coinmarketcap.portafolio.model.entities;
+package com.co.indra.coinmarketcap.portafolio.API.model;
 
 import java.io.Serializable;
 
