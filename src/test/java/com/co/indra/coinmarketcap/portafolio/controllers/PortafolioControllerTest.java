@@ -4,6 +4,7 @@ import com.co.indra.coinmarketcap.portafolio.config.Routes;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Asset;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Portafolio;
 import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
+import com.co.indra.coinmarketcap.portafolio.API.model.UserApi;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ErrorResponse;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ListPortfolio;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
@@ -14,20 +15,23 @@ import com.co.indra.coinmarketcap.portafolio.repositories.TransactionRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
@@ -51,6 +55,9 @@ public class PortafolioControllerTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @MockBean
+    private RestTemplate restTemplate;
 
     @Test
     public void addPortafolioHappyPath() throws Exception {
@@ -678,6 +685,65 @@ public class PortafolioControllerTest {
 
         ErrorResponse error = objectMapper.readValue(response.getContentAsString(), ErrorResponse.class);
         Assertions.assertEquals("Transaction not found", error.getMessage());
+
+    }
+
+    @Test
+    public void addPortafolioWithUserNotExistPath() throws Exception {
+        ResponseEntity<UserApi> entity = new ResponseEntity(HttpStatus.NOT_FOUND);
+        Mockito.when(restTemplate.getForEntity(Mockito.anyString(), Mockito.<Class<UserApi>>any())).thenReturn(entity);
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post("/portafolios")
+                .content("{\n" +
+                        "    \"username\": \"user100\",\n" +
+                        "    \"namePortafolio\": \"portafolio6\",\n" +
+                        "    \"balancePortafolio\": \"40\"\n" +
+                        "}").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        Assertions.assertEquals(404, response.getStatus());
+    }
+
+    @Test
+    public void addPortafolioWithUserHappyPath() throws Exception {
+        UserApi mockedBody = new UserApi("user1","user1@gmail.com", "user1", 2);
+        ResponseEntity<UserApi> entity = new ResponseEntity(mockedBody, HttpStatus.OK);
+        Mockito.when(restTemplate.getForEntity(Mockito.anyString(), Mockito.<Class<UserApi>>any())).thenReturn(entity);
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post("/portafolios")
+                .content("{\n" +
+                        "    \"username\": \"user1\",\n" +
+                        "    \"namePortafolio\": \"portafolio6\",\n" +
+                        "    \"balancePortafolio\": \"40\"\n" +
+                        "}").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        Assertions.assertEquals(200, response.getStatus());
+        List<Portafolio> portafolio = portafolioRepository.findByNamePortafolioAndUsername("portafolio6","user1" );
+        Assertions.assertEquals(1, portafolio.size());
+        Portafolio portafolioToAssert = portafolio.get(0);
+        Assertions.assertEquals("user1", portafolioToAssert.getUsername());
+        Assertions.assertEquals("portafolio6", portafolioToAssert.getNamePortafolio());
+        Assertions.assertEquals(40, portafolioToAssert.getBalancePortafolio());
+    }
+
+    @Test
+    @Sql("/testdata/get_portafolio.sql")
+    public void addPortafolioToUserWhenPortafolioAlreadyExist() throws Exception {
+        UserApi mockedBody = new UserApi("user1","user1000@gmail.com", "user1000", 2);
+        ResponseEntity<UserApi> entity = new ResponseEntity(mockedBody, HttpStatus.OK);
+        Mockito.when(restTemplate.getForEntity(Mockito.anyString(), Mockito.<Class<UserApi>>any())).thenReturn(entity);
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post("/portafolios")
+                .content("{\n" +
+                        "    \"username\": \"user1\",\n" +
+                        "    \"namePortafolio\": \"portafolio1\",\n" +
+                        "    \"balancePortafolio\": \"100.0\"\n" +
+                        "}").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
+        Assertions.assertEquals(412, response.getStatus());
+        String textREsponse = response.getContentAsString();
+        ErrorResponse error = objectMapper.readValue(textREsponse, ErrorResponse.class);
+        Assertions.assertEquals("002", error.getCode());
+        Assertions.assertEquals("Portafolio with that name already exists", error.getMessage());
 
     }
 }
