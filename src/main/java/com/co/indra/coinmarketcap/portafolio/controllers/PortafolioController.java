@@ -11,6 +11,8 @@ import com.co.indra.coinmarketcap.portafolio.services.AssetService;
 import com.co.indra.coinmarketcap.portafolio.services.PortafolioService;
 import com.co.indra.coinmarketcap.portafolio.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -42,6 +44,7 @@ public class PortafolioController {
      * http://localhost:8081/api/portafolios/users/{{username}}/portafolios
      * GET portafolios/users/{username}/portafolios
      */
+    @Cacheable(value="portafolio",cacheManager="expireOneMinute", key=("#username"))
     @GetMapping(Routes.PORTAFOLIO_BY_USER_PATH)
     public List<Portafolio> getPortafoliosUserName(
             @PathVariable("username") String username) {
@@ -65,10 +68,12 @@ public class PortafolioController {
      * @param
      * @return 200 OK
      */
+    @CacheEvict(value="portafolio", key=("#username"))
     @PostMapping(Routes.CREATE_ASSET_IN_PORTAFOLIO_BY_IDPORTAFOLIO_PATH)
     public void createAsset(@PathVariable("idPortafolio") Integer idPortafolio, @RequestBody FirstTransaction firstTrasaction) {
         assetService.registerAsset(idPortafolio, firstTrasaction);
     }
+
 
     /**
      * http://localhost:8081/api/portafolio/portafolios/{id_portafolio}/assets/{id_symbolCoin}

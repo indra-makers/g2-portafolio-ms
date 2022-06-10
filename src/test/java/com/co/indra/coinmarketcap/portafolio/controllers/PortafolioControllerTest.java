@@ -14,12 +14,14 @@ import com.co.indra.coinmarketcap.portafolio.model.responses.PortafoliosDistribu
 import com.co.indra.coinmarketcap.portafolio.repositories.TransactionRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -58,6 +60,14 @@ public class PortafolioControllerTest {
 
     @MockBean
     private RestTemplate restTemplate;
+
+    @Autowired
+    private RedisConnection redisConnection;
+
+    @BeforeEach
+    public void beforeEach() {
+        redisConnection.flushAll();
+    }
 
     @Test
     public void addPortafolioHappyPath() throws Exception {
