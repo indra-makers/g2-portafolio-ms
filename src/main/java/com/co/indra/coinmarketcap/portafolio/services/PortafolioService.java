@@ -14,6 +14,7 @@ import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,6 +48,7 @@ public class PortafolioService {
             portafolioRepository.create(portafolio);
         }
     }
+
 
     public List<Portafolio> getPortafolioByUsername(String username) {
         if(portafolioRepository.findByUsername(username).isEmpty()){

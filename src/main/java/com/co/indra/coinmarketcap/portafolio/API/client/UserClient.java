@@ -20,6 +20,7 @@ public class UserClient {
     @Value("${api.userClient.url}")
     private String apiUrl;
 
+
     public UserApi getPostsPlainJSON(String username) {
         UriComponentsBuilder uri = UriComponentsBuilder.fromUriString(apiUrl).path(username);
         return this.restTemplate.getForObject(uri.toUriString(), UserApi.class);
