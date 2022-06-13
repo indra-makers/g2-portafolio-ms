@@ -1,7 +1,6 @@
 package com.co.indra.coinmarketcap.portafolio.services;
 
-import com.co.indra.coinmarketcap.portafolio.api.service.UserService;
-import com.co.indra.coinmarketcap.portafolio.API.client.UserClient;
+import com.co.indra.coinmarketcap.portafolio.API.service.UserService;
 import com.co.indra.coinmarketcap.portafolio.API.service.APIService;
 import com.co.indra.coinmarketcap.portafolio.config.ErrorCodes;
 import com.co.indra.coinmarketcap.portafolio.exceptions.BusinessException;
@@ -13,7 +12,6 @@ import com.co.indra.coinmarketcap.portafolio.model.responses.ListPortfolio;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.TransactionRepository;
-import com.co.indra.coinmarketcap.portafolio.api.clients.UserClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

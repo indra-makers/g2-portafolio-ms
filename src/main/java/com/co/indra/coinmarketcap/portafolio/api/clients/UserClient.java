@@ -1,4 +1,4 @@
-package com.co.indra.coinmarketcap.portafolio.api.clients;
+package com.co.indra.coinmarketcap.portafolio.API.clients;
 
 import com.co.indra.coinmarketcap.portafolio.api.model.UserResponse;
 import org.springframework.beans.factory.annotation.Value;
