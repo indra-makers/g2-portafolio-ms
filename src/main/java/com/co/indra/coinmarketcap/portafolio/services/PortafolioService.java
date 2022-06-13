@@ -1,6 +1,8 @@
 package com.co.indra.coinmarketcap.portafolio.services;
 
 import com.co.indra.coinmarketcap.portafolio.api.service.UserService;
+import com.co.indra.coinmarketcap.portafolio.API.client.UserClient;
+import com.co.indra.coinmarketcap.portafolio.API.service.APIService;
 import com.co.indra.coinmarketcap.portafolio.config.ErrorCodes;
 import com.co.indra.coinmarketcap.portafolio.exceptions.BusinessException;
 import com.co.indra.coinmarketcap.portafolio.exceptions.NotFoundException;
@@ -32,6 +34,8 @@ public class PortafolioService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private APIService apiService;
 
     public void registerPortafolio(Portafolio portafolio) throws IOException {
         List<Portafolio> portafolioByNamePortafolioAndUsername = portafolioRepository.findByNamePortafolioAndUsername(portafolio.getNamePortafolio(), portafolio.getUsername());
