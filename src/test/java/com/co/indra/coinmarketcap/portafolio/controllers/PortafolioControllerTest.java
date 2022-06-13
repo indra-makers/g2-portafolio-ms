@@ -7,6 +7,7 @@ import com.co.indra.coinmarketcap.portafolio.model.entities.Transaction;
 import com.co.indra.coinmarketcap.portafolio.API.model.UserApi;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ErrorResponse;
 import com.co.indra.coinmarketcap.portafolio.model.responses.ListPortfolio;
+import com.co.indra.coinmarketcap.portafolio.api.model.UserResponse;
 import com.co.indra.coinmarketcap.portafolio.repositories.AssetRepository;
 import com.co.indra.coinmarketcap.portafolio.repositories.PortafolioRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -685,13 +686,12 @@ public class PortafolioControllerTest {
 
         ErrorResponse error = objectMapper.readValue(response.getContentAsString(), ErrorResponse.class);
         Assertions.assertEquals("Transaction not found", error.getMessage());
-
     }
 
     @Test
     public void addPortafolioWithUserNotExistPath() throws Exception {
-        ResponseEntity<UserApi> entity = new ResponseEntity(HttpStatus.NOT_FOUND);
-        Mockito.when(restTemplate.getForEntity(Mockito.anyString(), Mockito.<Class<UserApi>>any())).thenReturn(entity);
+        ResponseEntity<UserResponse> entity = new ResponseEntity(HttpStatus.NOT_FOUND);
+        Mockito.when(restTemplate.getForEntity(Mockito.anyString(), Mockito.<Class<UserResponse>>any())).thenReturn(entity);
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .post("/portafolios")
                 .content("{\n" +
@@ -699,8 +699,13 @@ public class PortafolioControllerTest {
                         "    \"namePortafolio\": \"portafolio6\",\n" +
                         "    \"balancePortafolio\": \"40\"\n" +
                         "}").contentType(MediaType.APPLICATION_JSON);
+
         MockHttpServletResponse response = mockMvc.perform(request).andReturn().getResponse();
         Assertions.assertEquals(404, response.getStatus());
+        String textResponse = response.getContentAsString();
+        ErrorResponse error = objectMapper.readValue(textResponse, ErrorResponse.class);
+        Assertions.assertEquals("API EXTERNAL", error.getCode());
+        Assertions.assertEquals("USER NOT FOUND", error.getMessage());
     }
 
     @Test

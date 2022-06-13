@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -34,7 +35,7 @@ public class PortafolioController {
      * POST
      */
     @PostMapping
-    public void addPortafolioToUser(@Valid @RequestBody Portafolio portafolio) {
+    public void addPortafolioToUser(@Valid @RequestBody Portafolio portafolio) throws IOException {
         portafolioService.registerPortafolio(portafolio);
     }
 

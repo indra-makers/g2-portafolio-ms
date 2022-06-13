@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-public class APIService {
+public class UserService {
 
     @Autowired
-    private UserClient userClient;
+    UserClient userClient;
 
-    public UserResponse getPostsPlainJSON(String username) {
+    public UserResponse getUserFromUsersmsByUsername(String username) throws IOException {
         return userClient.getUserFromUsersmsByUsername(username);
     }
 }

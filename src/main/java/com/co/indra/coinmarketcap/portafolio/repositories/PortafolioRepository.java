@@ -32,6 +32,7 @@ public class PortafolioRepository {
     @Autowired
     private JdbcTemplate template;
 
+
     public void create(Portafolio portafolio){
         template.update("INSERT INTO tbl_portafolios( username,name_portafolio, balance_portafolio) values(?,?,?)",
                 portafolio.getUsername(), portafolio.getNamePortafolio(), portafolio.getBalancePortafolio());
@@ -85,11 +86,7 @@ public class PortafolioRepository {
                 Integer.class, username);
     }
 
-
-
     public void deletePortafolio(Long idPortafolio){
         template.update("DELETE FROM tbl_portafolios WHERE id_portafolio=?", idPortafolio);
     }
-
-
 }
